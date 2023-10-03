@@ -280,23 +280,6 @@ void main(){
 
         }
     }
-
-    //usuario. ok
-    //reserva de quartos em rede ok
-    //datas disponiveis
-    // tipos de quarto ok
-    // disponibilidade em temporada
-    // dados de estadia ok
-    // relatorio (faturamento
-    // identificação de atendimento
-    // check-in e check-out (horarios de entrada e sada)
-    // <identificação de menu>
-    //login e senha // filiais // sair
-    //menu das funcionalidades
-
-    //definições de quartos // tipos de estadia - vatagens
-    //filial 1 - 9 quartos 3 tipos de estadia
-    //filial 2 - 12 quartos 4 tipos de estadia
 }
 
 int dataResevada(ano,mes,dia){
