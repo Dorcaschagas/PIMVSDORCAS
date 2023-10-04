@@ -22,8 +22,19 @@ struct quartosF2{
 struct dataReservada{
     int ano, mes, dia;
 };
+int dataResevada(ano,mes,dia){
 
-void main(){
+    struct dataReservada dtr1;
+    dtr1.ano = ano;
+    dtr1.mes = mes;
+    dtr1.dia = dia;
+
+    printf("------------------------------------------------------------------\n");
+    printf("Data escolhida  %d/%d/%d.\n" , dtr1.ano, dtr1.mes, dtr1.dia);
+    printf("------------------------------------------------------------------\n\n");
+}
+
+int main(){
     struct funcionarios f1;
     struct clientes cliente1;
     struct quartosF1 qts1, qts2, qts3; //primeira filial
@@ -49,7 +60,8 @@ void main(){
         printf("Senha invalida, digite novamente:\n", f1.nome);
         gets(f1.senha);
     }
-
+    system("pause"); //pede para apertar qualquer botão para continuar
+    system("cls"); //limpa tela
     //------------------------------------------------------------------------------
     //--------------------------informacoes do cliente
     //------------------------------------------------------------------------------
@@ -58,6 +70,8 @@ void main(){
     gets(cliente1.nome);
     printf("Digite o Sobrenome do cliente: ");
     gets(cliente1.sobrenome);
+    system("pause"); //pede para apertar qualquer botão para continuar
+    system("cls"); //limpa tela
     printf("------------------------------------------------------------------\n");
     printf("Ola,%s Seja bem vindo(a) ao Hotel[Nome] \n\n", cliente1.nome);
     printf("------------------------------------------------------------------\n");
@@ -67,7 +81,7 @@ void main(){
     //------------------------------------------------------------------------------
     while (resposta != "n" || resposta != "N"){
 
-    printf("\t\t\tQual sera a data da reserva?\n");
+    printf("\t\tQual sera a data da reserva?\n");
     printf("------------------------------------------------------------------\n");
     printf("\nAno (entre 2023 e 2024):");
     scanf("%d", &ano);
@@ -280,23 +294,9 @@ void main(){
 
         }
     }
+    return 0;
 }
 
-int dataResevada(ano,mes,dia){
-
-    struct dataReservada dtr1;
-    dtr1.ano = ano;
-    dtr1.mes = mes;
-    dtr1.dia = dia;
-
-    printf("------------------------------------------------------------------\n");
-    printf("Data escolhida  %d/%d/%d.\n" , dtr1.ano, dtr1.mes, dtr1.dia);
-    printf("------------------------------------------------------------------\n\n");
-}
-
-int quartoFilia1(qts1, qts2, qts3){
-
-}
 
 
 
