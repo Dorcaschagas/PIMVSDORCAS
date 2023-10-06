@@ -34,7 +34,7 @@ void main(){
 
 
     //------------------------------------------------------------------------------
-    //--------------------------informacoes do funcionario
+    //--------------------------Informacoes do funcionario
     //------------------------------------------------------------------------------
     //funcionario cadastrado
     strcpy(f1.nome, "Dorcas");
@@ -55,16 +55,16 @@ void main(){
     }
 
     //------------------------------------------------------------------------------
-    //--------------------------informacoes do cliente
+    //--------------------------Informacoes do cliente
     //------------------------------------------------------------------------------
-    printf("--------------------------Hotel[Nome]-----------------------------\n");
-    printf("Digite o nome do cliente: \n");
+    printf("--------------------------Hotel Algoritmo Suites Comfort-----------------------------\n");
+    printf("\nDigite o nome do cliente: ");
     gets(cliente1.nome);
     printf("Digite o Sobrenome do cliente: ");
     gets(cliente1.sobrenome);
     printf("------------------------------------------------------------------\n");
-    printf("Ola,%s Seja bem vindo(a) ao Hotel[Nome] \n\n", cliente1.nome);
-    printf("------------------------------------------------------------------\n");
+    printf("Ola,%s %s Seja bem vindo(a) ao Hotel Algoritmo Suites Comfort \n\n", cliente1.nome, cliente1.sobrenome);
+    printf("-----------------------------------------------------------------\n");
 
     //------------------------------------------------------------------------------
     //----------------------------Data para reserva
