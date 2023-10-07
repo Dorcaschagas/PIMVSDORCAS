@@ -33,7 +33,7 @@ int main()
     int numReservas = 0;
     char usuario[20]="Murilo", usuarioA[20], senha[20]="123", senhaA[20];
     int f;
-    printf("|-------|Bem-vindo ao sistema de reserva de hotel|-------|");
+    printf("|-------|Bem-vindo ao sistema de reservas da rede de hotel Algoritmo Suites|-------|");
     do
     {
         printf("\n\nUsuario:\n");
@@ -64,22 +64,22 @@ int main()
 //mes bisexto: 2
     do
     {
-        printf("\n|---------Bem vindo ao Hotel---------|\n");
-        printf("\n|Escolha 1 para a filial 1...........|");
-        printf("\n|Escolha 2 para a filial 2...........|");
+        printf("\n|---------Bem vindo a rede de Hotel Algoritmo Suites---------|\n");
+        printf("\n|Escolha 1 para a filial main 1...........|");
+        printf("\n|Escolha 2 para a filial main 2...........|");
         printf("\n|Escolha 3 para encerrar o programa..|\n");
         scanf("%d", &f);
         switch(f)
         {
         case 1:
-            printf("\nEscolheu filial 1\n");
+            printf("\nEscolheu filial main 1\n");
             system("pause");
             system("cls");
             do
             {
-                printf("\n|-----Bem-vindo ao reservas de hotel -filial 1-----|\n");
+                printf("\n|-----Bem-vindo as reservas do hotel - filial main 1-----|\n");
                 printf("\n1|Escolha 1 para fazer uma reserva...........|");
-                printf("\n2|Escolha 2 para vizualizar as reservas......|");
+                printf("\n2|Escolha 2 para visualizar as reservas......|");
                 printf("\n3|Escolha 3 para fazer Check-in e Check-out..|");
                 printf("\n4|Escolha 4 para ver datas disponiveis.......|\n");
                 scanf("%d", &ca);
@@ -87,11 +87,11 @@ int main()
                 switch(ca)
                 {
                 case 1:
-                    printf("Escolha o tipo de suite:");
-                    printf("\n1-----------Standart-----------1");
-                    printf("\n2-----------Confort------------2");
+                    printf("Escolha o tipo de quarto: ");
+                    printf("\n\n1-----------Standard-----------1");
+                    printf("\n2-----------Comfort------------2");
                     printf("\n3------------Master------------3");
-                    printf("\n4---------Presdiencial---------4\n");
+                    printf("\n4---------Presidencial---------4\n");
                     scanf("%d", &tq);
                     system("cls");
                     switch(tq)
@@ -128,7 +128,7 @@ int main()
 
                         do
                         {
-                            printf("\n|O dia da Reserva Standart (1 a %d)......|\n", band);
+                            printf("\n|O dia da Reserva Standard (1 a %d)......|\n", band);
                             scanf("%d", &Standard.dd);
 
 
@@ -161,7 +161,7 @@ int main()
                         system("cls");
                         break;
                     case 2:
-                        printf("\nVoce escolheu a Confort\n");
+                        printf("\nVoce escolheu a Comfort\n");
                         system("pause");
                         system("cls");
 
@@ -199,7 +199,7 @@ int main()
             while(ca!=13);
             break;
         case 2:
-            printf("\nEscolheu filial 2\n");
+            printf("\nEscolheu filial main 2\n");
             system("pause");
             system("cls");
             break;
