@@ -33,7 +33,7 @@ int main()
     int numReservas = 0;
     char usuario[20]="Murilo", usuarioA[20], senha[20]="123", senhaA[20];
     int f;
-    printf("|-------|Bem-vindo ao sistema de reservas da rede de hotel Algoritmo Suites|-------|");
+    printf("|-------|Bem-vindo ao sistema de reservas da rede de Hotel Algoritmo Comfort Suites|-------|");
     do
     {
         printf("\n\nUsuario:\n");
@@ -64,7 +64,7 @@ int main()
 //mes bisexto: 2
     do
     {
-        printf("\n|---------Bem vindo a rede de Hotel Algoritmo Suites---------|\n");
+        printf("\n|---------Bem vindo a rede de Hotel Algoritmo Comfort Suites---------|\n");
         printf("\n|Escolha 1 para a filial main 1...........|");
         printf("\n|Escolha 2 para a filial main 2...........|");
         printf("\n|Escolha 3 para encerrar o programa..|\n");
@@ -161,22 +161,199 @@ int main()
                         system("cls");
                         break;
                     case 2:
-                        printf("\nVoce escolheu a Comfort\n");
+                        system("cls");
+                        printf("\n|------------Suite Comfort------------|\n");
+                        do
+                        {
+                            printf("\n|Registre o numero do quarto (1 a 3)|...|\n");
+                            scanf("%d", &Confort.cnquarto);
+                        }
+                        while(Confort.cnquarto<=0||Confort.cnquarto>3);
+                        do
+                        {
+                            printf("\n|O ano da Reserva Comfort (2023 a 2025)|\n");
+                            scanf("%d", &Confort.caaaa);
+                        }
+                        while(Confort.caaaa!=2023 && Confort.caaaa!=2025 && Confort.caaaa!=2024);
+                        do
+                        {
+                            printf("\n|O mês da Reserva Comfort (1 a 12).....|\n");
+                            scanf("%d", &Confort.cmm);
+                        }
+                        while(Confort.cmm<=0 || Confort.cmm>12);
+                        if(Confort.cmm==1||Confort.cmm==3||Confort.cmm==5||Confort.cmm==7||Confort.cmm==8||Confort.cmm==10||Confort.cmm==12)
+                            band=31;
+                        else if(Confort.cmm==4||Confort.cmm==6||Confort.cmm==9||Confort.cmm==11)
+                            band=30;
+                        else if(Confort.caaaa!=2024&&Confort.cmm==2)
+                            band=28;
+                        else if(Confort.caaaa==2024&&Confort.cmm==2)
+                            band=29;
+
+                        do
+                        {
+                            printf("\n|O dia da Reserva Comfort (1 a %d)......|\n", band);
+                            scanf("%d", &Confort.cdd);
+
+
+                            for (i = 0; i < numReservas; i++)
+                            {
+                                if (reservas[i].numeroQuarto == Confort.cnquarto)
+                                {
+                                    if (Confort.caaaa == reservas[i].anoEntrada && Confort.cmm == reservas[i].mesEntrada && Confort.cdd == reservas[i].diaEntrada)
+                                    {
+                                        quartoDisponivel = 0;
+                                    }
+                                }
+                            }
+                            if (quartoDisponivel)
+                            {
+                                reservas[numReservas].numeroQuarto = Confort.cnquarto;
+                                reservas[numReservas].anoEntrada = Confort.caaaa;
+                                reservas[numReservas].mesEntrada = Confort.cmm;
+                                reservas[numReservas].diaEntrada = Confort.cdd;
+                                numReservas++;
+                                printf("\nReserva confirmada com sucesso.\n");
+                            }
+                            else
+                            {
+                                printf("\nO quarto não está disponível para a data selecionada.\n");
+                            }
+                        }
+                        while(Confort.cdd<=0 || Confort.cdd>band);
                         system("pause");
                         system("cls");
+                        break;
 
                         break;
                     case 3:
-                        printf("\nVoce escolheu a Master\n");
+                        system("cls");
+                        printf("\n|------------Suite Master------------|\n");
+                        do
+                        {
+                            printf("\n|Registre o numero do quarto (1 a 3)|...|\n");
+                            scanf("%d", &Master.mnquarto);
+                        }
+                        while(Master.mnquarto<=0||Master.mnquarto>3);
+                        do
+                        {
+                            printf("\n|O ano da Reserva Master (2023 a 2025)|\n");
+                            scanf("%d", &Master.maaaa);
+                        }
+                        while(Master.maaaa!=2023 && Master.maaaa!=2025 && Master.maaaa!=2024);
+                        do
+                        {
+                            printf("\n|O mês da Reserva Master (1 a 12).....|\n");
+                            scanf("%d", &Master.mmm);
+                        }
+                        while(Master.mmm<=0 || Master.mmm>12);
+                        if(Master.mmm==1||Master.mmm==3||Master.mmm==5||Master.mmm==7||Master.mmm==8||Master.mmm==10||Master.mmm==12)
+                            band=31;
+                        else if(Master.mmm==4||Master.mmm==6||Master.mmm==9||Master.mmm==11)
+                            band=30;
+                        else if(Master.maaaa!=2024&&Master.mmm==2)
+                            band=28;
+                        else if(Master.maaaa==2024&&Master.mmm==2)
+                            band=29;
+
+                        do
+                        {
+                            printf("\n|O dia da Reserva Master (1 a %d)......|\n", band);
+                            scanf("%d", &Master.mdd);
+
+
+                            for (i = 0; i < numReservas; i++)
+                            {
+                                if (reservas[i].numeroQuarto == Master.mnquarto)
+                                {
+                                    if (Master.maaaa == reservas[i].anoEntrada && Master.mmm == reservas[i].mesEntrada && Master.mdd == reservas[i].diaEntrada)
+                                    {
+                                        quartoDisponivel = 0;
+                                    }
+                                }
+                            }
+                            if (quartoDisponivel)
+                            {
+                                reservas[numReservas].numeroQuarto = Master.mnquarto;
+                                reservas[numReservas].anoEntrada = Master.maaaa;
+                                reservas[numReservas].mesEntrada = Master.mmm;
+                                reservas[numReservas].diaEntrada = Master.mdd;
+                                numReservas++;
+                                printf("\nReserva confirmada com sucesso.\n");
+                            }
+                            else
+                            {
+                                printf("\nO quarto não está disponível para a data selecionada.\n");
+                            }
+                        }
+                        while(Master.mdd<=0 || Master.mdd>band);
                         system("pause");
                         system("cls");
-
                         break;
+
                     case 4:
-                        printf("\nVoce escolheu a Presidencial\n");
+                        system("cls");
+                        printf("\n|------------Suite Presidencial------------|\n");
+                        do
+                        {
+                            printf("\n|Registre o numero do quarto (1 a 3)|...|\n");
+                            scanf("%d", &Presid.pnquarto);
+                        }
+                        while(Presid.pnquarto<=0||Presid.pnquarto>3);
+                        do
+                        {
+                            printf("\n|O ano da Reserva Presidencial (2023 a 2025)|\n");
+                            scanf("%d", &Presid.paaaa);
+                        }
+                        while(Presid.paaaa!=2023 && Presid.paaaa!=2025 && Presid.paaaa!=2024);
+                        do
+                        {
+                            printf("\n|O mês da Reserva Presidencial (1 a 12).....|\n");
+                            scanf("%d", &Presid.pmm);
+                        }
+                        while(Presid.pmm<=0 || Presid.pmm>12);
+                        if(Presid.pmm==1||Presid.pmm==3||Presid.pmm==5||Presid.pmm==7||Presid.pmm==8||Presid.pmm==10||Presid.pmm==12)
+                            band=31;
+                        else if(Presid.pmm==4||Presid.pmm==6||Presid.pmm==9||Presid.pmm==11)
+                            band=30;
+                        else if(Presid.paaaa!=2024&&Presid.pmm==2)
+                            band=28;
+                        else if(Presid.paaaa==2024&&Presid.pmm==2)
+                            band=29;
+
+                        do
+                        {
+                            printf("\n|O dia da Reserva Presidencial (1 a %d)......|\n", band);
+                            scanf("%d", &Presid.pdd);
+
+
+                            for (i = 0; i < numReservas; i++)
+                            {
+                                if (reservas[i].numeroQuarto == Presid.pnquarto)
+                                {
+                                    if (Presid.paaaa == reservas[i].anoEntrada && Presid.pmm == reservas[i].mesEntrada && Presid.pdd == reservas[i].diaEntrada)
+                                    {
+                                        quartoDisponivel = 0;
+                                    }
+                                }
+                            }
+                            if (quartoDisponivel)
+                            {
+                                reservas[numReservas].numeroQuarto = Presid.pnquarto;
+                                reservas[numReservas].anoEntrada = Presid.paaaa;
+                                reservas[numReservas].mesEntrada = Presid.pmm;
+                                reservas[numReservas].diaEntrada = Presid.pdd;
+                                numReservas++;
+                                printf("\nReserva confirmada com sucesso.\n");
+                            }
+                            else
+                            {
+                                printf("\nO quarto não está disponível para a data selecionada.\n");
+                            }
+                        }
+                        while(Presid.pdd<=0 || Presid.pdd>band);
                         system("pause");
                         system("cls");
-
                         break;
                     default:
                         break;
