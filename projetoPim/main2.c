@@ -64,20 +64,20 @@ int main()
 //mes bisexto: 2
     do
     {
-        printf("\n|---------Bem vindo a rede de Hotel Algoritmo Comfort Suites---------|\n");
-        printf("\n|Escolha 1 para a filial main 1...........|");
-        printf("\n|Escolha 2 para a filial main 2...........|");
+        printf("\n|---------Bem vindo a rede de Hotel Algoritmo Suites---------|\n");
+        printf("\n|Escolha 1 para a filial 1 Master ...........|");
+        printf("\n|Escolha 2 para a filial 2 Comfort...........|");
         printf("\n|Escolha 3 para encerrar o programa..|\n");
         scanf("%d", &f);
         switch(f)
         {
         case 1:
-            printf("\nEscolheu filial main 1\n");
+            printf("\nEscolheu filial 1 Master\n");
             system("pause");
             system("cls");
             do
             {
-                printf("\n|-----Bem-vindo as reservas do hotel - filial main 1-----|\n");
+                printf("\n|-----Bem-vindo as reservas do hotel - filial 1 Master-----|\n");
                 printf("\n1|Escolha 1 para fazer uma reserva...........|");
                 printf("\n2|Escolha 2 para visualizar as reservas......|");
                 printf("\n3|Escolha 3 para fazer Check-in e Check-out..|");
@@ -376,7 +376,7 @@ int main()
             while(ca!=13);
             break;
         case 2:
-            printf("\nEscolheu filial main 2\n");
+            printf("\nEscolheu filial 2\n");
             system("pause");
             system("cls");
             break;
