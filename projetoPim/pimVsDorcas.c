@@ -4,28 +4,32 @@
 #include <locale.h>
 #include <time.h>
 
-int qtdPessoas = 0, tq, valorQuarto = 0, entDia, aaaa = 0, mm = 0, dd = 0, totDiasMes, totalDias ;
+int qtdPessoas = 0, tq, valorQuarto = 0, entDia, aaaa = 0, mm = 0, dd = 0, totDiasMes, totalDias, i ;
 
-struct cadastroCliente{
+typedef struct
+{
     char nome[50], cpf[12];
-    int idade;
-};
+}cadastroCliente;
+
+typedef struct
+{
+    int numeroQuarto, diaDoAnoEntrada,diaDoAnoSaida, AnoEntrada, AnoSaida;
+    char nomeR, cpfR;
+} ReservaA;
+void FazerReservas(ReservaA reserva[], int *nReservas);
+int CompararDataAtual (int Dia, int Mes, int Ano);
+int ValidarDatas(int dia, int mes, int ano);
+int dataParaDiaDoAno(int dia, int mes, int ano);
+int VerificarSobreposicao(ReservaA reserva[], int nReservas, int numeroQuarto, int diaDoAnoEntrada, int diaDoAnoSaida);
 
 
-struct dataEntrada{
-    int entradaAno, entradaMes, entradaDia;
-};
-struct QuartosF1{
-    int quartos[13][366];
-};
-
-
-int main(){
+int main()
+{
     setlocale(LC_ALL, "Portuguese");
 
-    struct cadastroCliente cadastroCl[1000];
-    struct QuartosF1 quartos;
-    struct dataEntrada entrada;
+    cadastroCliente cadastroCl[1000];
+    ReservaA reservas[366];
+    int numReservas = 0;
     int filial, opc;
 
     //=====================================================
@@ -33,7 +37,8 @@ int main(){
     login();
     system("cls");
 
-    do{
+    do
+    {
         system("cls");
         printf("\n|------------------Bem vindo a rede Hotel Algoritmo Suites-------------------|\n");
         printf("\n|1.Escolha 1 para a filial 1 - Master.............................|");
@@ -43,31 +48,21 @@ int main(){
         //system("pause");
         system("cls");
 
-        switch (filial){
-            case 1:
-            do{
-            system("cls");
-            mensagemMenu();
-            scanf("%d", &opc);
-            system("cls");
+        switch (filial)
+        {
+        case 1:
+            do
+            {
+                system("cls");
+                mensagemMenu();
+                scanf("%d", &opc);
+                system("cls");
 
-            switch (opc){
+                switch (opc)
+                {
                 case 1:
                     system("cls");
-                    //=====================================================
-                    //======================Data===========================
-                    system("cls");
-                    printf("Quantos dias voce gostaria de reservar?:");
-                    scanf("%d", &totalDias);
-                    system("cls");
-
-                    //codigo do Murilo.
-                    aaaa = ano();
-                    mm = mes();
-                    dd = dia(aaaa, mm);
-                    datasEntradas(&entrada,aaaa,mm,dd);
-                    system("cls");
-                    menu();
+                    FazerReservas(reservas, &numReservas);
                     break;
                 case 2:
                     //=====================================================
@@ -75,7 +70,8 @@ int main(){
                     printf("Quantas pessoas:");
                     scanf("%d", &qtdPessoas);
                     fflush(stdin);
-                    for(int i = 0; i < qtdPessoas; i++){
+                    for(int i = 0; i < qtdPessoas; i++)
+                    {
                         cliente(&cadastroCl[i]);
                     }
                     break;
@@ -84,12 +80,8 @@ int main(){
                     //====================relatorio========================
                     system("cls");
                     relatorio(cadastroCl);
-                    mostraDataEnt(entrada);
-                    mostrarDataSai(entrada,totalDias);
                     break;
                 case 4:
-                    mostraDataEnt(entrada);
-                    mostrarDataSai(entrada,totalDias);
                     break;
                 case 5:
 
@@ -110,8 +102,9 @@ int main(){
                 case 10:
                     return 0;
                     break;
-                    }
-                }while (opc != 13);
+                }
+            }
+            while (opc != 13);
             break;
         case 2:
             printf("\nEscolheu filial 2\n");
@@ -127,37 +120,42 @@ int main(){
             system("cls");
             break;
         }
-    }while(filial != 3);
+    }
+    while(filial != 3);
 
     //=====================================================
     //=====================Quartos=========================
 
     return 0;
 }
-void login(){
+void login()
+{
 
     char nome1[50];
     char senha[10];
     //nome--------------------------------------
-    do{
+    do
+    {
         printf("\nUsuario: ");
         scanf("%s", &nome1);
-    }while(strcmp(nome1,"Dorcas"));
+    }
+    while(strcmp(nome1,"Dorcas"));
     //senha-------------------------------------
-    do{
+    do
+    {
         printf("Senha: ");
         scanf("%s", &senha);
-    }while(strcmp(senha,"0000"));
+    }
+    while(strcmp(senha,"0000"));
 
 }
 
 //============================================================================================
 //========================================Clientes===========================================
-int cliente(struct cadastroCliente *cadastroCl){
+int cliente(cadastroCliente *cadastroCl)
+{
     printf("Nome:");
     scanf("%s", cadastroCl->nome);
-    printf("Idade:");
-    scanf("%d", &cadastroCl->idade);
     printf("CPF:");
     scanf("%s", cadastroCl->cpf);
     printf("\n===================================\n");
@@ -165,11 +163,21 @@ int cliente(struct cadastroCliente *cadastroCl){
 }
 //============================================================================================
 //=======================================relatorio============================================
-int relatorio(struct cadastroCliente cadastroCl[]){
+int relatorioR(ReservaA reservas[], int *nReservas){
 
-    for(int i = 0; i < qtdPessoas; i++){
+for(i=0;i<*nReservas;i++){
+    printf("%s");
+    printf("%s");
+    printf("%d");
+    printf("%d");
+}
+}
+int relatorio(cadastroCliente cadastroCl[])
+{
+
+    for(int i = 0; i < qtdPessoas; i++)
+    {
         printf("Nome: %s\n", cadastroCl[i].nome);
-        printf("Idade: %d\n", cadastroCl[i].idade);
         printf("CPF: %s\n", cadastroCl[i].cpf);
         printf("===================================\n");
     }
@@ -177,14 +185,14 @@ int relatorio(struct cadastroCliente cadastroCl[]){
 }
 //============================================================================================
 //======================================reserva Datas=========================================
-int datasEntradas(struct dataEntrada *entrada, int ano, int mes, int dia){
+/*int datasEntradas(struct dataEntrada *entrada, int ano, int mes, int dia){
     entrada->entradaAno = ano;
     entrada->entradaMes = mes;
     entrada->entradaDia = dia;
     return 0;
-}
+}*/
 
-int mostraDataEnt(struct dataEntrada entrada){
+/*int mostraDataEnt(struct dataEntrada entrada){
     return printf("Data reserva %d/%d/%d\n", entrada.entradaAno, entrada.entradaMes, entrada.entradaDia);
 }
 
@@ -212,71 +220,12 @@ void mostrarDataSai(struct dataEntrada entrada, int totDias){
     system("pause");
     system("cls");
     return 0;
-}
-//============================================================================================
-//=========================================Datas==============================================
-int ano() {
-    int aaaa;
-    do {
-        printf("\nAno (2023 a 2025)|\n");
-        scanf("%d", &aaaa);
-        fflush(stdin);
-    } while (aaaa < 2023 || aaaa > 2025);
-    return aaaa;
-}
+}*/
 
-int mes(){
-    int mm;
-    do{//mes
-        printf("\nMês(1 a 12).....|\n");
-        scanf("%d", &mm);
-        fflush(stdin);
-    }while(mm < 1 || mm >12);
-    return mm;
-}
-
-int dia( aaaa, mm){
-    int dias;
-
-    if(mm!=2){
-        if((mm<=7 && mm%2==0) || (mm<=7 && mm%2!=0)){//meses pares de janeiro a julho
-            dias = 30;
-            do{
-                printf("\nDia (1 a %d)......|\n", dias);
-                scanf("%d", &dd);
-            } while(dd < 1 || dd > 30);
-        }
-        if((mm >=8 && mm%2==0) || (mm>=8 && mm%2!=0)){
-            dias = 31;
-            do{
-                printf("\nDia (1 a %d)......|\n", dias);
-                scanf("%d", &dd);
-            } while(dd < 1 || dd > 31);
-        }
-    } else {
-        if(aaaa % 4 == 0 && (aaaa % 100 != 0 || aaaa % 400 == 0)){
-            if(mm == 2){
-                dias = 29;
-                do{
-                    printf("\nDia (1 a %d)......|\n", dias);
-                    scanf("%d", &dd);
-                } while(dd < 1 || dd > 29);
-            }
-        } else if(mm == 2 && !aaaa % 4 == 0 && (aaaa % 100 != 0 || aaaa % 400 == 0)){
-            dias = 28;
-            do{
-                printf("\nDia (1 a %d)......|\n", dias);
-                scanf("%d", &dd);
-            } while(dd < 1 || dd > 28);
-        }
-    }
-    entDia = dd;
-    totDiasMes = dias;
-    return dd;
-}
 //============================================================================================
 //==================================mensagem menu=============================================
-void mensagemMenu(){
+void mensagemMenu()
+{
     printf(" \n______________________________________________________ ");
     printf("\n|-------Bem-vindo ao Algoritmo Suites Master-----------|");
     printf("\n ______________________________________________________ ");
@@ -293,41 +242,10 @@ void mensagemMenu(){
 }
 //============================================================================================
 //========================================Quartos=============================================
-void tipoQuarto(){
-    int numQrt, qrtdLivre=12 , valorQuarto;
-
-    if(tq == 1){
-        valorQuarto = 50;
-    }
-    if(tq == 2){
-        valorQuarto = 75;
-    }
-    if(tq == 3){
-        valorQuarto = 100;
-    }
-    if(tq == 4){
-        valorQuarto =  150;
-    }
-
-    printf("Tipo escolhido foi %d\n", tq);
-
-    printf("Quantos dias voce gostaria de reservar?:");
-    scanf("%d", &totalDias);
-    system("cls");
-
-    printf("\nQuarto de 1 a 3 :");
-    scanf("%d",&numQrt);
-
-    int valorReserva = totalDias * valorQuarto;
-    printf("valor para %d dias no quarto %d será de: %d\n", totalDias, numQrt, valorReserva);
-    system("pause");
-    system("cls");
-
-    return valorReserva;
-}
 
 
-int menu(){
+
+/*int menu(){
     printf("\nGlossario de reserva\n");
     printf("\n1-----------Standard-----------1");
     printf("\nvalor da Diária: R$:50,00\n");
@@ -370,6 +288,247 @@ int menu(){
         printf("Opção inválida\n");
         break;
     }
+}*/
+
+void diaDoAnoParaData(int diaDoAno, int ano, int *dia, int *mes)
+{
+    int diasNoMes[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    if (ano % 4 == 0 && (ano % 100 != 0 || ano % 400 == 0))
+    {
+        diasNoMes[2] = 29; // Fevereiro em anos bissextos
+    }
+
+    int i;
+    for (i = 1; i <= 12; i++)
+    {
+        if (diaDoAno <= diasNoMes[i])
+        {
+            break;
+        }
+        diaDoAno -= diasNoMes[i];
+    }
+
+    *dia = diaDoAno;
+    *mes = i;
+}
+int ValidarDatas(int dia, int mes, int ano)
+{
+
+    if ((mes <= 7 && mes % 2 != 0 ) || mes > 7 && mes % 2 == 0)
+    {
+        if (dia >= 1 && dia <= 31)
+        {
+            return 1; // Data válida
+        }
+    }
+    else if (!mes == 2 && (mes <= 7 && mes % 2 == 0) || mes > 7 && mes % 2 != 0)
+    {
+        if (dia >= 1 && dia <= 30)
+        {
+            return 1;
+        }
+    }
+    else if (mes == 2)
+    {
+        if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0))
+        {
+            if (dia >= 1 && dia <= 29)
+            {
+                return 1;
+            }
+        }
+        else
+        {
+            if (dia >= 1 && dia <= 28)
+            {
+                return 1;
+            }
+        }
+    }
+    else
+    {
+        return 0;
+    }
+}
+int CompararDataAtual(int Dia, int Mes, int Ano)
+{
+    time_t current_time;
+    struct tm* timeinfo;
+    time(&current_time);
+    timeinfo = localtime(&current_time);
+
+    if (Ano < timeinfo->tm_year + 1900)
+    {
+        return -1; // A data fornecida está no passado
+    }
+    else if (Ano > timeinfo->tm_year + 1900)
+    {
+        return 0; // A data fornecida está no futuro
+    }
+    else
+    {
+        if (Mes < timeinfo->tm_mon + 1)
+        {
+            return -1; // A data fornecida está no passado
+        }
+        else if (Mes > timeinfo->tm_mon + 1)
+        {
+            return 0; // A data fornecida está no futuro
+        }
+        else
+        {
+            if (Dia < timeinfo->tm_mday)
+            {
+                return -1; // A data fornecida está no passado
+            }
+            else if (Dia > timeinfo->tm_mday)
+            {
+                return 0; // A data fornecida está no futuro
+            }
+            else
+            {
+                return 0; // A data fornecida é igual à data atual
+            }
+        }
+    }
+}
+int dataParaDiaDoAno(int dia, int mes, int ano)
+{
+    int diasNoMes[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    if (ano % 4 == 0 && (ano % 100 != 0 || ano % 400 == 0))
+    {
+        diasNoMes[2] = 29; // Fevereiro em anos bissextos
+    }
+
+    int diaDoAno = dia;
+    for (int i = 1; i < mes; i++)
+    {
+        diaDoAno += diasNoMes[i];
+    }
+
+    return diaDoAno;
+}
+int VerificarSobreposicao(ReservaA reserva[], int nReservas, int numeroQuarto, int diaDoAnoEntrada, int diaDoAnoSaida)
+{
+    for (int i = 0; i < nReservas; i++)
+    {
+        if (reserva[i].numeroQuarto == numeroQuarto)
+        {
+            // Verificar se a nova reserva começa antes da reserva existente terminar
+            if (diaDoAnoSaida >= reserva[i].diaDoAnoEntrada)
+            {
+                // Verificar se a nova reserva termina depois da reserva existente começar
+                if (diaDoAnoEntrada <= reserva[i].diaDoAnoSaida)
+                {
+                    return 1; // Sobreposição encontrada
+                }
+            }
+        }
+    }
+    return 0; // Sem sobreposição de datas
 }
 
+void FazerReservas(ReservaA reserva[], int *nReservas)
+{
+    int anoEntrada, mesEntrada, diaEntrada, anoSaida, mesSaida, diaSaida, diaDoAnoEntrada, diaDoAnoSaida, VerOut, VerSob, numeroQuarto, valin, valout,compin, compout, p=1;
+
+    do
+    {
+        do
+        {
+            printf("\n---------------Fazer uma Reserva---------------\n");
+            printf("\nDigite o numero do quarto:\n");
+            scanf("%d", &numeroQuarto);
+            fflush(stdin);
+            system("cls");
+
+        }
+        while(numeroQuarto<1 && numeroQuarto>12);
+        // recebi o quarto de 1 ate 13
+
+
+        do
+        {
+            do
+            {
+                printf("\nDigite a data de Check-in desta forma DD/MM/AAAA:");
+                scanf("%d/%d/%d", &diaEntrada, &mesEntrada, &anoEntrada);
+                fflush(stdin);
+                valin = ValidarDatas( diaEntrada,  mesEntrada,  anoEntrada) ;
+                compin = CompararDataAtual ( diaEntrada,  mesEntrada, anoEntrada);  //compara data com a atual
+                if (valin == 0) //valida datas (invalida)
+                {
+                    printf("\n\t|xxxxx|-Data de Check-in Inválida-|xxxxx|\n");
+                    printf("\nPor Favor Insira Novamente:\n");
+                }
+                if (compin == -1) //compara data com a atual(invalida)
+                {
+                    printf("\n\t|xxxxx|-Data de Check-in já passou-|xxxxx|\n");
+                    printf("\nPor Favor Insira Novamente:\n");
+                }
+                printf("%d", compin);
+            }
+            while (valin  != 1 || compin != 0); //valida datas valida e quebra looping (ir para proxima etapa)
+            do
+            {
+                printf("Digite a data de Check-out desta forma DD/MM/AAAA:");
+                scanf("%d/%d/%d", &diaSaida, &mesSaida, &anoSaida);
+                fflush(stdin);
+                valout = ValidarDatas(diaSaida, mesSaida, anoSaida);
+                compout =  CompararDataAtual ( diaSaida,  mesSaida, anoSaida);
+                if (valout == 0) //valida datas (invalida)
+                {
+                    printf("\n\t|xxxxx|-Data de Check-out Inválida-|xxxxx|\n");
+                    printf("\nPor Favor Insira Novamente:\n");
+                }
+                if (compout == 1) //compara data com a atual
+                {
+                    printf("\n\t|xxxxx|-Data de Check-out já passou-|xxxxx|\n");
+                    printf("\nPor Favor Insira Novamente:\n");
+                }
+
+                diaDoAnoEntrada = dataParaDiaDoAno(diaEntrada, mesEntrada, anoEntrada);
+                diaDoAnoSaida = dataParaDiaDoAno(diaSaida, mesSaida, anoSaida);
+
+                if (diaDoAnoEntrada < diaDoAnoSaida)
+                {
+                    VerOut = 1;
+                }
+                else if (VerOut != 1)
+                {
+                    printf("\n\t|xxxxx|-Data de Check-out Inválida (data de check-out menor ou igual à de check-in)-|xxxxx|\n");
+                    printf("\nPor Favor Insira Novamente:\n");
+                }
+
+                VerSob = VerificarSobreposicao(reserva, *nReservas, numeroQuarto, diaDoAnoEntrada, diaDoAnoSaida);
+
+                if (VerSob == 1)
+                {
+                    printf("\n\t|xxxxx|-Conflito de datas com outra reserva-|xxxxx|\n");
+                    printf("\nPor Favor Insira Novamente:\n");
+                }
+
+            }
+            while (valout != 1 && VerOut != 1 && compout !=0 && compout !=1); //valida datas e quebra looping (ir para proxima etapa)
+        }
+        while (valout != 1 && VerOut != 1 && VerSob == 1);
+
+        // Registre o número do dia do ano nas reservas
+        reserva[*nReservas].diaDoAnoEntrada = diaDoAnoEntrada;
+        reserva[*nReservas].diaDoAnoSaida = diaDoAnoSaida;
+        reserva[*nReservas].numeroQuarto = numeroQuarto;
+        reserva[*nReservas].AnoSaida= anoSaida;
+        reserva[*nReservas].AnoEntrada= anoEntrada;
+
+        // Use os valores de diaDoAnoEntrada e diaDoAnoSaida conforme necessário
+        p = 2;
+        printf("\nReserva registrada com sucesso!\n");
+        system("pause");
+        system("cls");
+        (*nReservas)++;
+    }
+    while (p != 2);
+}
 
