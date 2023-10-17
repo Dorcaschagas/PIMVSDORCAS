@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-
 struct standard
 {
     int nquarto, aaaa, mm, dd;
@@ -74,6 +73,7 @@ int main()
     float prp, prm, prc, prs;
     int ca, tq, band=0, i, j;
     int quartoDisponivel = 1;
+
 //meses com 31 dias:1,3,5,7,8,10,12
 //meses com 30 dias: 4,,6,9,11
 //mes bisexto: 2
@@ -94,8 +94,8 @@ int main()
             printf("\nEscolheu filial 1 Master\n");
             system("pause");
             system("cls");
-            do
-            {
+
+            do{
                 printf("\n|-----Bem-vindo as reservas do hotel - filial 1 Master-----|\n");
                 printf("\n1|Escolha 1 para fazer uma reserva...........|");
                 printf("\n2|Escolha 2 para visualizar as reservas......|");
@@ -129,7 +129,6 @@ int main()
                             printf("\n|Registre o numero do quarto (1 a 3)|...|\n");
                             scanf("%d", &Standard.nquarto);
                         }
-
                         //Standard.nquarto <= a 1  || Standard.nquarto >= 3(mudar)
                         while(Standard.nquarto<=0||Standard.nquarto>3);
 
