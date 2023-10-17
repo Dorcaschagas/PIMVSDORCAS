@@ -226,23 +226,30 @@ else {
 }
 
 
-int CompararDataAtual (int Dia, int Mes, int Ano){
-int hora, horat;
-time_t current_time;
-struct tm* timeinfo;
-time(&current_time);
-timeinfo = localtime(&current_time);
-struct tm desired_date;
-desired_date.tm_year = Ano - 1900;
-desired_date.tm_mon = Mes - 1;
-desired_date.tm_mday = Dia;
-hora=mktime(&desired_date);
-horat=mktime(&current_time);
-if(difftime(hora, horat)<0){
-    return 1;
-    }
-    else{
-        return 0;
+int CompararDataAtual(int Dia, int Mes, int Ano) {
+    time_t current_time;
+    struct tm* timeinfo;
+    time(&current_time);
+    timeinfo = localtime(&current_time);
+
+    if (Ano < timeinfo->tm_year + 1900) {
+        return -1; // A data fornecida está no passado
+    } else if (Ano > timeinfo->tm_year + 1900) {
+        return 0; // A data fornecida está no futuro
+    } else {
+        if (Mes < timeinfo->tm_mon + 1) {
+            return -1; // A data fornecida está no passado
+        } else if (Mes > timeinfo->tm_mon + 1) {
+            return 0; // A data fornecida está no futuro
+        } else {
+            if (Dia < timeinfo->tm_mday) {
+                return -1; // A data fornecida está no passado
+            } else if (Dia > timeinfo->tm_mday) {
+                return 0; // A data fornecida está no futuro
+            } else {
+                return 0; // A data fornecida é igual à data atual
+            }
+        }
     }
 }
 void FazerReservas(ReservaA reserva[], int *nReservas)
@@ -278,14 +285,14 @@ void FazerReservas(ReservaA reserva[], int *nReservas)
                     printf("\n\t|xxxxx|-Data de Check-in Inválida-|xxxxx|\n");
                     printf("\nPor Favor Insira Novamente:\n");
                 }
-                    if (compin == 1) //compara data com a atual(invalida)
+                    if (compin == -1) //compara data com a atual(invalida)
                 {
                     printf("\n\t|xxxxx|-Data de Check-in já passou-|xxxxx|\n");
                     printf("\nPor Favor Insira Novamente:\n");
                 }
+            printf("%d", compin);
             }
             while (valin  != 1 || compin != 0); //valida datas valida e quebra looping (ir para proxima etapa)
-            printf("%d", compin);
             do
             {
                 printf("Digite a data de Check-out desta forma DD/MM/AAAA:");
@@ -326,7 +333,7 @@ void FazerReservas(ReservaA reserva[], int *nReservas)
                 }
 
             }
-            while (valout != 1 && VerOut != 1 && compout !=0); //valida datas e quebra looping (ir para proxima etapa)
+            while (valout != 1 && VerOut != 1 && compout !=0 && compout !=1); //valida datas e quebra looping (ir para proxima etapa)
         }
         while (valout != 1 && VerOut != 1 && VerSob == 1);
 
