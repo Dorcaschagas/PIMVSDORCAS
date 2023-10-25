@@ -43,6 +43,8 @@ int ValidarDatas(int dia, int mes, int ano);
 int dataParaDiaDoAno(int dia, int mes, int ano);
 int VerificarSobreposicao(ReservaA reserva[], int nReservas, int numeroQuarto, int diaDoAnoEntrada, int diaDoAnoSaida);
 void mensagemMenuFun();
+void descricaoQrt();
+
 int main()
 {
     setlocale(LC_ALL, "Portuguese");
@@ -50,72 +52,66 @@ int main()
     cadastroCliente client[1000];
     ReservaA reservas[1000];
     int numReservas = 0, nClientes =0, numFuncionarios =0;
-    int  opc;
-    definidorfuncionarios(Funcionarios, &numFuncionarios);
+    int  opc1 = 0, opc = 0, num;
+
     //=====================================================
     //=======================login=========================
+    //definidorfuncionarios(Funcionarios, &numFuncionarios);
 
-
-    do
-    {
+    do{
         system("cls");
         printf("\n=============================================\n");
         printf("---Bem vindo a rede Hotel Algoritmo Suites---");
         printf("\n=============================================\n");
         printf("Escolha uma opção\n");
-        printf("[1] Login de Cliente!\n");
-        printf("[2] Login de Colaborador!\n");
-        printf("[3] Cadastre-se!\n");
-        printf("[4] Fechar programa\n");
+        printf("[1] Login de Cliente.\n");
+        printf("[2] Login de Colaborador.\n");
+        printf("[3] Cadastre-se.\n");
+        printf("[4] Conheça nossos Quartos.\n");
+        printf("[5] Fechar programa.\n");
         scanf("%d", &TipodeUsuario);
-        if(TipodeUsuario==2)
-        opc1=1;
+        fflush(stdin);
+         if(TipodeUsuario==2)
+            opc1=1;
         else if(TipodeUsuario==1)
-        opc1=1;
+            opc1=1;
         else if(TipodeUsuario==3)
             opc1=3;
         else if(TipodeUsuario==4)
             opc1=4;
-            else{
-                opc1=5;
-                printf("opcao invalida\n");
-                system("pause");
-            }
+        else if(TipodeUsuario==5)
+            opc1=5;
 
-        switch(opc1)
-        {
+        switch(opc1){
         case 1:
-            if(TipodeUsuario==2)
-            LoginFuncionario(Funcionarios, &numFuncionarios);
-            if(TipodeUsuario==1)
-            Logincliente(client, Funcionarios, &nClientes, &numFuncionarios);
 
-            do
-            {
+            if(TipodeUsuario==1)
+                Logincliente(client, Funcionarios, &nClientes, &numFuncionarios);
+            if(TipodeUsuario==2)
+                LoginFuncionario(Funcionarios, &numFuncionarios);
+
+            do{
                 system("cls");
                 printf("\n|------------------Bem vindo a rede Hotel Algoritmo Suites-------------------|\n");
-                printf("   \n|1.Escolha 1 para a filial 1 - Master.............................|");
+                printf("\n|1.Escolha 1 para a filial 1 - Master.............................|");
                 printf("\n|2.Escolha 2 para a filial 2 - Confort............................|");
                 printf("\n|3.Escolha 3 para Voltar..........................................|\n");
                 scanf("%d", &filial);
                 system("cls");
 
-
-                switch (filial)
-                {
+                switch (filial){
                 case 1:
-                    do
-                    {
+                    do{
                         system("cls");
                         if(CARGO==1)
                             mensagemMenuFun();
                         if(CARGO==0)
                             mensagemMenuCli();
+
                         scanf("%d", &opc);
                         system("cls");
 
-                        switch (opc)
-                        {
+                        switch (opc){
                         case 1:
                             if(CARGO==1)
                             {
@@ -194,8 +190,7 @@ int main()
 
                             break;
                         }
-                    }
-                    while (opc != 13);
+                    }while (opc != 13);
                     break;
                 case 2:
 
@@ -208,8 +203,7 @@ int main()
                     system("cls");
                     break;
                 }
-            }
-            while(filial != 3);
+            }while(filial != 3);
             break;
         case 2:
             LoginFuncionario(Funcionarios, &numFuncionarios);
@@ -218,56 +212,64 @@ int main()
             cadastrarCliente(client, &nClientes);
             break;
         case 4:
-            return 0;
+            system("cls");
+            printf("[1]FILIAL – MASTER\n");
+            printf("[2]FILIAL – COMFORT\n");
+            scanf("%d", &num);
+
+            if(num == 1){
+                descricaoQrtF1();
+            }else if(num == 2){
+                descricaoQrtF2();
+            } else {
+                printf("Escolha invalida!\n\n");
+                system("pause");
+            }
+
+            break;
+        case 5:
             break;
         default:
             system("cls");
             printf("\nOpção Invalida!\n");
             break;
         }
-    }
-    while(opc1!=4);
+    }while(opc1!=5);
     //=====================================================
     //=====================Quartos=========================
 
     return 0;
 }
-void Logincliente(cadastroCliente cadastroCli[], funcionarios Funcionario[],int *numClientes, int *nFuncionarios)
-{
+
+void Logincliente(cadastroCliente cadastroCli[], funcionarios Funcionario[],int *numClientes, int *nFuncionarios){
+    system("cls");
     int procurarcliente, acesso;
     char nome1[50];
     char senhaA[15];
-    do
-    {
-        if(*numClientes!=0)
-        {
+
+    do{
+        if(*numClientes!=0){
             printf("\nUsuario: ");
             scanf("%s", &nome1);
             printf("Senha: ");
             scanf("%s", &senhaA);
 
-            for(i=0; i<*numClientes; i++)
-            {
-                if(strcmp(nome1,cadastroCli[i].nome)==0)
-                {
+            for(i=0; i<*numClientes; i++){
+                if(strcmp(nome1,cadastroCli[i].nome)==0){
                     procurarcliente=i;
                     acesso=1;
                     acessoglobal=2;
                 }
             }
-            for(i=0; i<*numClientes; i++)
-            {
-                if(strcmp(senhaA,cadastroCli[i].senha)==0)
-                {
+            for(i=0; i<*numClientes; i++){
+                if(strcmp(senhaA,cadastroCli[i].senha)==0){
                     procurarcliente=i;
                     acesso=1;
                     acessoglobal=2;
                 }
             }
             CARGO=cadastroCli[procurarcliente].cargo;
-        }
-        else if(*numClientes==0)
-        {
+        }else if(*numClientes==0){
             printf("\nAinda não há Clientes!\n");
             cadastrarCliente(cadastroCli, numClientes);
             acessoglobal=2;
@@ -279,28 +281,24 @@ void Logincliente(cadastroCliente cadastroCli[], funcionarios Funcionario[],int 
     strcpy(SENHA,cadastroCli[procurarcliente].senha);
     strcpy(CPF,cadastroCli[procurarcliente].cpf);
 }
-LoginFuncionario(funcionarios Funcionario[], int *nFuncionarios)
-{
+
+LoginFuncionario(funcionarios Funcionario[], int *nFuncionarios){
     int procurarfun, procurarcliente;
     char nome1[50], senhaA[15];
 
-    do
-    {
+    do{
         printf("\nUsuario: ");
         scanf("%s", &nome1);
         printf("Senha: ");
         scanf("%s", &senhaA);
 
-        for (int i = 0; i < nFuncionarios; i++)
-        {
-            if (strcmp(nome1, Funcionario[i].nome) == 0 && strcmp(senhaA, Funcionario[i].senha) == 0)
-            {
+        for (int i = 0; i < nFuncionarios; i++){
+            if (strcmp(nome1, Funcionario[i].nome) == 0 && strcmp(senhaA, Funcionario[i].senha) == 0){
                 procurarfun = 1;
                 procurarcliente=i;
                 break;
             }
         }
-
     }
     while( procurarfun != 1);
     CARGO=Funcionario[procurarcliente].cargo;
@@ -310,16 +308,17 @@ LoginFuncionario(funcionarios Funcionario[], int *nFuncionarios)
 
 //============================================================================================
 //========================================Clientes===========================================
-void cadastrarCliente(cadastroCliente client[], int *nClientes)
-{
+void cadastrarCliente(cadastroCliente client[], int *nClientes){
+    system("cls");
+
     cadastroCliente novoCliente;
-    printf("Digite o nome do cliente: ");
+    printf("\nDigite o nome do cliente: ");
     scanf(" %[^\n]", novoCliente.nome);
 
-    printf("Digite o CPF do cliente: ");
+    printf("\nDigite o CPF do cliente: ");
     scanf(" %s", novoCliente.cpf);
 
-    printf("Digite a Senha do Cliente");
+    printf("\nDigite a Senha do Cliente ");
     scanf(" %s", novoCliente.senha);
 
     novoCliente.cargo=0;
@@ -328,8 +327,10 @@ void cadastrarCliente(cadastroCliente client[], int *nClientes)
 
     client[*nClientes] = novoCliente;
     (*nClientes)++;
-    printf("Cliente cadastrado com sucesso.\n");
+    printf("\n\nCliente %s, cadastrado com sucesso!!!\n\n", novoCliente.nome);
+    system("pause");
 
+    return;
 }
 //============================================================================================
 //=======================================relatorio============================================
@@ -367,8 +368,8 @@ void mensagemMenuFun()
     printf("\n7|Escolha 7 para ver relatorio de faturamento..........|");
     printf("\n\n10|Escolha 13 voltar.................................|\n\n");
 }
-void mensagemMenuCli()
-{
+
+void mensagemMenuCli(){
     printf(" \n______________________________________________________ ");
     printf("\n|-------Bem-vindo ao Algoritmo Suites Master-----------|");
     printf("\n ______________________________________________________ ");
@@ -378,6 +379,89 @@ void mensagemMenuCli()
     printf("\n2|Escolha 2 para visualizar as minhas reservas.........|");
     printf("\n2|Escolha 3 para visualizar estadias ja reservadas.....|");
     printf("\n\n10|Escolha 13 para voltar............................|\n\n");
+}
+
+void descricaoQrtF1(){
+    system("cls");
+    printf("\n_________________________________________________________________________________________\n");
+    printf("=============================REDE DE HOTEL ALGORITMO SUÍTES==============================\n");
+
+    printf("\n\t\t\t\tFILIAL 1 – MASTER\n\n");
+
+
+    printf("\n======================================STANDARD===========================================\n");
+    printf("Esta categoria possui apartamentos de 30m², todos com sacada e decoração moderna. \
+           \nEstão em andares mais baixos, com vista para o jardim. Piso vinílico, frigobar, tv \
+           \npor assinatura, banheiro completo com amenities de banho e secador de cabelo. \
+           \nOpção: cama Queen Size ou duas camas de solteiro. Café da manhã e wifi são cortesia.");
+    printf("\n\n__________________________________________________________________Preço da diária: 650,00\n");
+    printf("=========================================================================================\n\n");
+
+    printf("======================================COMFORT=============================================\n");
+    printf("Esta categoria possui apartamentos de 40m², todos com decoração moderna. \
+           \nEstão em andares intermediários, com vista para a cidade. Piso vinílico, frigobar, \
+           \ntábua de passar e ferro, tv por assinatura, banheiro completo com amenities de banho, \
+           \nsecador de cabelo e roupão. Cama Queen Size. Café da manhã e wifi são cortesia. ");
+    printf("\n\n__________________________________________________________________Preço da diária: 850,00\n");
+    printf("=========================================================================================\n\n");
+
+    printf("\n======================================MASTER==============================================\n");
+    printf("Esta categoria possui apartamentos de 50m², todos com decoração moderna. Estão em andares \
+           \nintermediários, com vista para a cidade. Piso vinílico, frigobar, tábua de passar e ferro, \
+           \ntv por assinatura e plataforma de streaming. Banheiro completo com amenities L’Occitane \
+           \nde banho, secador de cabelo, roupão e chinelo de quarto. Cama Queen Size. \
+           \nCafé da manhã e wifi são cortesia.");
+    printf("\n\n__________________________________________________________________Preço da diária: 1150,00\n");
+    printf("=========================================================================================\n\n");
+
+    printf("\n===================================PRESIDENCIAL===========================================\n");
+    printf("Esta categoria possui apartamentos suntuosos, elegantes e confortáveis de 90m². \
+           \nEstão em andares altos com vista panorâmica da cidade. Piso vinílico, frigobar, \
+           \ntv por assinatura e plataforma de streaming, máquina de café Nespresso. \
+           \nBanheiro completo com hidromassagem, amenities de banho L’Occitane, secador de cabelo, \
+           \nroupão e chinelo de quarto. Cama King Size. Café da manhã e wifi são cortesia.");
+    printf("\n\n__________________________________________________________________Preço da diária: 1750,00\n");
+    printf("=========================================================================================\n\n");
+
+    system("pause");
+    return;
+}
+
+void descricaoQrtF2(){
+    system("cls");
+    printf("\n_________________________________________________________________________________________\n");
+    printf("=============================REDE DE HOTEL ALGORITMO SUÍTES==============================\n");
+
+    printf("\n\t\t\t\tFILIAL 1 – MASTER\n\n");
+
+
+    printf("\n======================================STANDARD===========================================\n");
+    printf("Esta categoria possui apartamentos de 20m² com decoração moderna. Estão em andares \
+           \nmais baixos, com vista para o jardim. Piso vinílico, frigobar, tv por assinatura, \
+           \nbanheiro completo com amenities de banho e secador de cabelo. Opção: cama de casal ou \
+           \nduas camas de solteiro. Café da manhã e wifi são cortesia.");
+    printf("\n\n__________________________________________________________________Preço da diária: 450,00\n");
+    printf("=========================================================================================\n\n");
+
+    printf("======================================COMFORT=============================================\n");
+    printf("Esta categoria possui apartamentos de 25m², todos com decoração moderna. \
+           \nEstão em andares intermediários, com vista para a cidade. Piso vinílico, frigobar, \
+           \ntv por assinatura, banheiro completo com amenities de banho. Cama Queen Size. \
+           \nCafé da manhã e wifi são cortesia. ");
+    printf("\n\n__________________________________________________________________Preço da diária: 550,00\n");
+    printf("=========================================================================================\n\n");
+
+    printf("\n======================================MASTER=============================================\n");
+    printf("Esta categoria possui apartamentos de 30m², todos com decoração moderna e sacada. \
+           \nEstão em andares altos, com vista para a cidade. Piso vinílico, frigobar, \
+           \ntv por assinatura e máquina de café Nespresso. Banheiro completo com amenities, \
+           \nsecador de cabelo e roupão. Cama King Size. Café da manhã e wifi são cortesia. ");
+    printf("\n\n__________________________________________________________________Preço da diária: 750,00\n");
+    printf("=========================================================================================\n\n");
+
+    system("pause");
+    return;
+
 }
 void diaDoAnoParaData(int diaDoAno, int ano, int *dia, int *mes)
 {
@@ -646,7 +730,7 @@ void FazerReservasFuncionario(ReservaA reserva[], cadastroCliente cadastroCli[],
 }
 void FazerReservasCliente(ReservaA reserva[], cadastroCliente cadastroCli[],  int *nReservas, int *numClientes)
 {
-    int p=1, opcreserva, quebraL=1, codcli, codirese, gapDia;
+    int p=1, opcreserva, quebraL=1, codcli, codirese, gapDia, pgReserva;
     float precoR;
     do
     {
@@ -677,11 +761,20 @@ void FazerReservasCliente(ReservaA reserva[], cadastroCliente cadastroCli[],  in
             {
                 printf("==================Pagamento==================");
                 printf("=============================================");
-                printf("\nDigite 1 para pagar a reserva \n");
-                printf("Digite 0 para pagar depois\n ");
-                scanf("%d", &reserva[*nReservas].pg);
+                printf("\n[1]Pagar a reserva \n");
+                printf("[0]Pagar no check-out\n ");
+                scanf("%d", &pgReserva);
+                //scanf("%d", &reserva[*nReservas].pg);
+            }while(pgReserva < 1 || pgReserva > 2);
+            //while(reserva[*nReservas].pg!=0 &&reserva[*nReservas].pg!=1);
+
+
+            if(pgReserva == 1){
+                formaPagamento();
+            }else if(pgReserva == 2){
+                printf("Pagamento em aberto!");
             }
-            while(reserva[*nReservas].pg!=0 &&reserva[*nReservas].pg!=1);
+
             codirese=*nReservas+1501;
             reserva[*nReservas].CodRes = codirese;
             printf("\nO codigo da reserva é: %d\n",  reserva[*nReservas].CodRes);
@@ -1108,12 +1201,28 @@ int recebedordecheckin(ReservaA reserva[], int*nReservas)
     {
         printf("\n---------------Fazer uma Reserva---------------\n");
         printf("\nDigite o numero do quarto:\n");
+        printf("========STANDARD========\n");
+        printf("[1]Quarto\n");
+        printf("[2]Quarto\n");
+        printf("[3]Quarto\n");
+        printf("========COMFORT========\n");
+        printf("[4]Quarto\n");
+        printf("[5]Quarto\n");
+        printf("[6]Quarto\n");
+        printf("========MASTER========\n");
+        printf("[7]Quarto\n");
+        printf("[8]Quarto\n");
+        printf("[9]Quarto\n");
+        printf("=====PRESIDENCIAL=====\n");
+        printf("[10]Quarto\n");
+        printf("[11]Quarto\n");
+        printf("[12]Quarto\n");
+
         scanf("%d", &numeroQuarto);
         fflush(stdin);
         system("cls");
 
-    }
-    while(numeroQuarto<1 && numeroQuarto>12);
+    }while(numeroQuarto < 1 || numeroQuarto > 12);
     do
     {
         do
@@ -1178,3 +1287,213 @@ int recebedordecheckin(ReservaA reserva[], int*nReservas)
     }
     while (VerSob != 0);
 }
+
+int formaPagamento(){
+    int opcao;
+
+    printf("\n|================================\n");
+    printf("|======Formas de Pagamentos======\n");
+    printf("|[1]Cartao\n"); //credito // debito
+    printf("|[2]Dinheiro\n");
+    printf("|[3]Boleto\n");
+    printf("|[4]pix\n");
+    printf("|[0]Cancelar\n");
+    printf("|================================\n");
+    printf("Digite a forma de pagamento: ");
+    scanf("%d", &opcao);
+    system("cls");
+    switch (opcao) {
+    case 1:
+        printf("\n________________________________________________________________________________________________________\n");
+        printf("\t\t\t\t\tPagamento em Cartão.");
+        printf("\n________________________________________________________________________________________________________\n");
+        cartao();
+        printf("\n________________________________________________________________________________________________________\n");
+        break;
+    case 2:
+        printf("\n________________________________________________________________________________________________________\n");
+        printf("\t\tPagamento em Dinheiro.");
+        printf("Seu pagamento será cobrado no Check-out!\n");
+        printf("\n________________________________________________________________________________________________________\n");
+        break;
+    case 3:
+        printf("\n________________________________________________________________________________________________________\n");
+        printf("\t\t\t\t\tPagamento em Boleto.");
+        printf("\n========================================================================================================\n");
+        boleto();
+        break;
+    case 4:
+        printf("\n________________________________________________________________________________________________________\n");
+        printf("\t\t\t\t\tPagamento em Pix.");
+        printf("\n________________________________________________________________________________________________________\n");
+        printf("Chave pix: \n\t12 345 678 0001 00");
+        printf("\n________________________________________________________________________________________________________\n");
+        break;
+    case 0:
+        printf("Pagamento cancelado.\n");
+        break;
+    default:
+        printf("Opção inválida.\n");
+        break;
+    }
+    return 0;
+}
+
+int boleto(){
+    int numDoc;
+    numDoc++;
+    time_t agora = time(NULL);
+    char hoje[20];
+    strftime(hoje, sizeof(hoje), "%d/%m/%Y", localtime(&agora));
+
+    printf("\n________________________________________________________________________________________________________\n");
+    printf("Nome do Beneficiario: \t\t\t\t\t\t\t| CNPJ:");
+    printf("\n\tHotel suite confort \t\t\t\t\t\t| 12.345.678/0001-00");
+    printf("\n________________________________________________________________________|_______________________________\n");
+    printf("Data do Documento\t\t|N Do Documento: \t\t|Valor:");
+    printf("\n\tData: %s \t|", hoje);
+    numeroDoc(numDoc);
+    printf("\t|");
+    valorReserva();
+    printf("\n________________________________|_______________________________|_______________________________________\n");
+    cod();
+    printf("--------------------------------------------------------------------------------------------------------\n");
+    printf("Local de Pagamento:\t\t\t\t\t| Vencimento:\n");
+    printf("\tEm qualquer banco ate o vencimento\t\t|");
+    printf("\tvencimento");
+    printf("\n________________________________________________________|_______________________________________________\n");
+    printf("Instrucoes:\n\n");
+    printf("1) NAO ACEITAR PAGAMENTO EM CHEQUE\n\n");
+    printf("2) NAO ACEITAR MAIS DE UM PAGAMENTO COM O MESMO BOLETO\n\n");
+    printf("3) EM CASO DE VENCIMENTO NO FIM DE SEMANA OU FERIADO, ACEITAR O PAGAMENTO ATE O PRIMEIRO DIAS UTIL APOS \nO VENCIMENTOS\n");
+    printf("\n\n________________________________________________________________________________________________________\n");
+    printf("Beneficiario:\n\n");
+    enderecoMatriz();
+    printf("\n________________________________________________________________________________________________________\n");
+    printf("Pagador:\n");
+    cliente();
+    printf("\n________________________________________________________________________________________________________\n\n");
+    codBarra();
+    return 0;
+}
+
+void numeroDoc(int *numDoc){
+    printf("\t001230045600789.%d", numDoc);
+    return;
+}
+
+void cod(){
+    int cont = 0;
+    int numeros[48];
+
+    printf("\n--------------------------------------------------------------------------------------------------------\n");
+    for (int i = 0; i < 47; i++){
+        numeros[i] = rand() % 10;
+    }
+    printf("\n\n");
+    for (int i = 0; i < 47; i++){
+        if (cont <= 0){
+             printf("\t\t\t\t\t| 123-4 | ");
+        }
+        printf("%d", numeros[i]);
+        if(cont == 5){
+            printf(".");
+        }
+        if(cont == 10){
+            printf(" ");
+        }
+        if(cont == 15){
+            printf(".");
+        }
+        if(cont == 21){
+            printf(" ");
+        }
+        if(cont == 26){
+            printf(".");
+        }
+        if(cont == 32){
+            printf(" ");
+        }
+        if(cont == 33){
+            printf(" ");
+        }
+        cont++;
+    }
+    printf("\n");
+
+    return;
+}
+
+void codBarra(){
+    int cont = 0;
+    for (int j = 0; j < 2; j++){
+        if(cont <= 0){
+            printf("\t\t\t\t\t\t|");
+        }
+        if(cont == 1){
+            printf("\t\t\t\t\t\t|");
+        }
+        cont++;
+        for (int i = 0; i < 8; i++){
+            printf("|||||| ");
+        }
+        printf("\n");
+    }
+    printf("\n--------------------------------------------------------------------------------------------------------\n");
+}
+
+void valorReserva(){
+    int valor = 1500;
+
+    printf("\tR$ %d,00", valor);
+}
+
+void enderecoMatriz(){
+    printf("\tSuites Algaritmos:\n");
+    printf("\tEndereco: Araraquara-SP");
+    return;
+}
+
+void cliente(){
+    printf("\tDorcas Chagas Pereira\n");
+    printf("\t\t\t\t\tCodigo de Barra");
+    return;
+}
+
+void cartao(){
+    int opcao, dia, mes, ano;
+    printf("Dorcas Chagas\n");
+    printf("CPF: 123456789-10\n");
+
+    char numero_cartao[50] = "1234-5678-9012-3456";
+    int codigo_seguranca;
+
+    printf("\n\nNº cartao: %s\n", numero_cartao);
+
+    printf("Data de validade:");
+    scanf("%d/%d/%d/",&dia, &mes, &ano);
+    fflush(stdin);
+
+    printf("\nCód de segurança");
+    scanf("%d",&codigo_seguranca);
+
+    do{
+        printf("\n\nConfirmar pagamento [1][sim]  [2][cancelar]\n");
+        scanf("%d", &opcao);
+        switch (opcao) {
+        case 1:
+            printf("Pagamento confirmado!");
+            break;
+        case 2:
+            printf("Pagamento cancelado!");
+            break;
+        default:
+            printf("Opção inválida!");
+            break;
+        }
+    }while(opcao < 0 || opcao > 2);
+
+    return;
+}
+
+
