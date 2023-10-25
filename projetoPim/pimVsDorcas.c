@@ -46,7 +46,8 @@ int main(){
 
     cadastroCliente client[1000];
     ReservaA reservas[366];
-    int numReservas = 0, nClientes =0;
+    int numReservas = 0, nClientes;
+    menucliente = 0;
     int filial, opc;
 
     do{
@@ -68,7 +69,7 @@ int main(){
                 cadastrarCliente(client, &nClientes);
 
 //=================veririficação funcionario ou cliente=================
-                if(menucliente == 1){
+                if(menucliente === 1){
                     scanf("%d", &opc);
                     do{
                         system("cls");
@@ -161,41 +162,34 @@ void login(){
 }
 //============================================================================================
 //========================================Clientes===========================================
-void cadastrarCliente(cadastroCliente client[], int *nClientes)
-{
+void cadastrarCliente(cadastroCliente client[], int *nClientes, int *menucliente){
+
     cadastroCliente novoCliente;
-    int numpessoas;
+    char funcionario[50] = "Filial";
 
     printf("Nome: ");
     scanf(" %[^\n]", novoCliente.nome);
 
-    printf("CPF: ");
-    scanf(" %s", novoCliente.cpf);
-
-    novoCliente.codcad=*nClientes+1;
-
-    client[*nClientes] = novoCliente;
-    (*nClientes)++;
-
-    clienteFuncionario(novoCliente.nome);
-}
-//=====================================================
-//=======================login=========================
-void clienteFuncionario(char *nome){
-
-    char funcionario[50] = "Filial1";
-
-    if(strcmp(nome, funcionario) == 0){
-        system("cls");
+    if(strcmp(novoCliente.nome, funcionario) == 0){
         printf("Faça o login para acessar o sistema!\n");
         login();
         system("cls");
-    } else {
+    } else{
+        printf("CPF: ");
+        scanf(" %s", novoCliente.cpf);
+
+        novoCliente.codcad=*nClientes+1;
+
+        client[*nClientes] = novoCliente;
         printf("Cliente cadastrado com sucesso.\n");
+        system("pause");
         system("cls");
         menuCliente();
+        (*nClientes)++;
+        *menucliente++;
     }
 }
+
 //============================================================================================
 //=======================================relatorio============================================
 void exibirClientes(cadastroCliente client[], int *numClientes){
