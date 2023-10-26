@@ -1235,8 +1235,7 @@ void definirCorConsole()
     }
 }
 
-void definidorfuncionarios(funcionarios Funcionarios[], int *nFuncionarios)
-{
+void definidorfuncionarios(funcionarios Funcionarios[], int *nFuncionarios){
     strcpy(Funcionarios[0].nome,"Dorcas");
     strcpy(Funcionarios[0].senha,"0000");
     Funcionarios[0].cargo=1;
@@ -1262,38 +1261,13 @@ void definidorfuncionarios(funcionarios Funcionarios[], int *nFuncionarios)
 int recebedordecheckin(ReservaA reserva[], int*nReservas)
 {
     int VerOut, VerSob, valin, compin, valout, compout;
-    do
-    {
-        printf("\n---------------Fazer uma Reserva---------------\n");
-        printf("\nDigite o numero do quarto:\n");
-        printf("========STANDARD========\n");
-        printf("[1]Quarto ==========650,00\n");
-        printf("[2]Quarto\n");
-        printf("[3]Quarto\n");
-        printf("========COMFORT=====850,00\n");
-        printf("[4]Quarto\n");
-        printf("[5]Quarto\n");
-        printf("[6]Quarto\n");
-        printf("========MASTER=====1150,00\n");
-        printf("[7]Quarto\n");
-        printf("[8]Quarto\n");
-        printf("[9]Quarto\n");
-        printf("=====PRESIDENCIAL===750,00\n");
-        printf("[10]Quarto\n");
-        printf("[11]Quarto\n");
-        printf("[12]Quarto\n");
-        printf("===========================\n");
+    do{//=================== chamando funcao menu dos quartos filial um ==========================
+        menuQtsF1();
 
-        scanf("%d", &numeroQuarto);
-        fflush(stdin);
-        system("cls");
+    }while(numeroQuarto < 1 || numeroQuarto > 12);
 
-    }
-    while(numeroQuarto < 1 || numeroQuarto > 12);
-    do
-    {
-        do
-        {
+    do{
+        do{
             printf("\nDigite a data de Check-in desta forma DD/MM/AAAA:");
             scanf("%d/%d/%d", &diaEntrada, &mesEntrada, &anoEntrada);
             fflush(stdin);
@@ -1309,10 +1283,9 @@ int recebedordecheckin(ReservaA reserva[], int*nReservas)
                 printf("\n\t|xxxxx|-Data de Check-in já passou-|xxxxx|\n");
                 printf("\nPor Favor Insira Novamente:\n");
             }
-        }
-        while (valin  != 1 || compin != 0);
-        do
-        {
+        }while (valin  != 1 || compin != 0);
+
+        do{
             printf("Digite a data de Check-out desta forma DD/MM/AAAA:");
             scanf("%d/%d/%d", &diaSaida, &mesSaida, &anoSaida);
             fflush(stdin);
@@ -1353,6 +1326,48 @@ int recebedordecheckin(ReservaA reserva[], int*nReservas)
         }
     }
     while (VerSob != 0);
+}
+
+void menuQtsF1(){
+    printf("\n---------------Fazer uma Reserva---------------\n");
+    printf("\nDigite o numero do quarto:\n");
+    printf("========STANDARD========\n");
+    printf("[1]Quarto ==========650,00\n");
+    printf("[2]Quarto\n");
+    printf("[3]Quarto\n");
+    printf("========COMFORT=====850,00\n");
+    printf("[4]Quarto\n");
+    printf("[5]Quarto\n");
+    printf("[6]Quarto\n");
+    printf("========MASTER=====1150,00\n");
+    printf("[7]Quarto\n");
+    printf("[8]Quarto\n");
+    printf("[9]Quarto\n");
+    printf("=====PRESIDENCIAL===750,00\n");
+    printf("[10]Quarto\n");
+    printf("[11]Quarto\n");
+    printf("[12]Quarto\n");
+    printf("===========================\n");
+    return;
+}
+
+menuQtsF2(){
+    printf("\n---------------Fazer uma Reserva---------------\n");
+    printf("\nDigite o numero do quarto:\n");
+    printf("========STANDARD========\n");
+    printf("[1]Quarto ==========450,00\n");
+    printf("[2]Quarto\n");
+    printf("[3]Quarto\n");
+    printf("========COMFORT=====550,00\n");
+    printf("[4]Quarto\n");
+    printf("[5]Quarto\n");
+    printf("[6]Quarto\n");
+    printf("========MASTER=====750,00\n");
+    printf("[7]Quarto\n");
+    printf("[8]Quarto\n");
+    printf("[9]Quarto\n");
+    printf("===========================\n");
+    return;
 }
 
 int formaPagamento()
@@ -1586,6 +1601,5 @@ void cartao()
         }
     }
     while(opcao < 0 || opcao > 2);
-
     return;
 }
