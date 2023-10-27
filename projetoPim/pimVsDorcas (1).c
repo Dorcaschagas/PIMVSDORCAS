@@ -626,59 +626,146 @@ int VerificarSobreposicao(ReservaA reserva[], int nReservas, int numeroQuarto, i
     }
     return 0; // Sem sobreposição de datas
 }
-int PrecificarQuartoF1(int nnQuarto, float preco)
-{
-    float precoS1=650.00, precoC1=850.00, precoM1=1150.00, precoP1=1750.00;
-    if(nnQuarto>=1 && nnQuarto<=3)
-    {
-        preco=precoS1;
-    }
-    if(nnQuarto>=4 && nnQuarto<=6)
-    {
-        preco=precoC1;
-    }
-    if(nnQuarto>=7 && nnQuarto<=9)
-    {
-        preco=precoM1;
-    }
-    if(nnQuarto>=10 && nnQuarto<=12)
-    {
-        preco=precoP1;
-    }
-    return preco;
-}
-int PrecificarQuartoF2(int nnQuarto, float preco)
-{
-    float precoS1=450.00, precoC1=550.00, precoM1=750.00;
-    if(nnQuarto>=1 && nnQuarto<=3)
-    {
-        preco=precoS1;
-    }
-    if(nnQuarto>=4 && nnQuarto<=6)
-    {
-        preco=precoC1;
-    }
-    if(nnQuarto>=7 && nnQuarto<=9)
-    {
-        preco=precoM1;
-    }
 
-    return preco;
+typedef struct {
+    float precoS1;
+    float precoC1;
+    float precoM1;
+    float precoP1;
+} PrecosFilial1;
+
+typedef struct {
+    float precoS2;
+    float precoC2;
+    float precoM2;
+} PrecosFilial2;
+
+PrecosFilial1 precosF1;
+PrecosFilial2 precosF2;
+
+void InicializarPrecos() {
+    // Inicialize os preços das filiais aqui
+    precosF1.precoS1 = 650.00;
+    precosF1.precoC1 = 850.00;
+    precosF1.precoM1 = 1150.00;
+    precosF1.precoP1 = 1750.00;
+
+    precosF2.precoS2 = 450.00;
+    precosF2.precoC2 = 550.00;
+    precosF2.precoM2 = 750.00;
 }
+
+float PrecificarQuartoF1(int nnQuarto) {
+    if (nnQuarto >= 1 && nnQuarto <= 3) {
+        return precosF1.precoS1;
+    }
+    if (nnQuarto >= 4 && nnQuarto <= 6) {
+        return precosF1.precoC1;
+    }
+    if (nnQuarto >= 7 && nnQuarto <= 9) {
+        return precosF1.precoM1;
+    }
+    if (nnQuarto >= 10 && nnQuarto <= 12) {
+        return precosF1.precoP1;
+    }
+    return 0.0; // Retorna um valor padrão caso o número do quarto não corresponda a nenhum caso.
+}
+
+float PrecificarQuartoF2(int nnQuarto) {
+    if (nnQuarto >= 1 && nnQuarto <= 3) {
+        return precosF2.precoS2;
+    }
+    if (nnQuarto >= 4 && nnQuarto <= 6) {
+        return precosF2.precoC2;
+    }
+    if (nnQuarto >= 7 && nnQuarto <= 9) {
+        return precosF2.precoM2;
+    }
+    return 0.0; // Retorna um valor padrão caso o número do quarto não corresponda a nenhum caso.
+}
+
+
+typedef struct {
+    float precoS1;
+    float precoC1;
+    float precoM1;
+    float precoP1;
+} PrecosFilial1;
+
+typedef struct {
+    float precoS2;
+    float precoC2;
+    float precoM2;
+} PrecosFilial2;
+
+
+float PrecificarQuartoF1(int nnQuarto) {
+    // Inicialize os preços da Filial 1 aqui
+    precosF1.precoS1 = 650.00;
+    precosF1.precoC1 = 850.00;
+    precosF1.precoM1 = 1150.00;
+    precosF1.precoP1 = 1750.00;
+
+    if (nnQuarto >= 1 && nnQuarto <= 3) {
+        return precosF1.precoS1;
+    }
+    if (nnQuarto >= 4 && nnQuarto <= 6) {
+        return precosF1.precoC1;
+    }
+    if (nnQuarto >= 7 && nnQuarto <= 9) {
+        return precosF1.precoM1;
+    }
+    if (nnQuarto >= 10 && nnQuarto <= 12) {
+        return precosF1.precoP1;
+    }
+    return 0.0; // Retorna um valor padrão caso o número do quarto não corresponda a nenhum caso.
+}
+
+float PrecificarQuartoF2(int nnQuarto) {
+    // Inicialize os preços da Filial 2 aqui
+    precosF2.precoS2 = 450.00;
+    precosF2.precoC2 = 550.00;
+    precosF2.precoM2 = 750.00;
+
+    if (nnQuarto >= 1 && nnQuarto <= 3) {
+        return precosF2.precoS2;
+    }
+    if (nnQuarto >= 4 && nnQuarto <= 6) {
+        return precosF2.precoC2;
+    }
+    if (nnQuarto >= 7 && nnQuarto <= 9) {
+        return precosF2.precoM2;
+    }
+    return 0.0; // Retorna um valor padrão caso o número do quarto não corresponda a nenhum caso.
+}
+
+int main() {
+    int nnQuarto = 4;
+    float precoF1 = PrecificarQuartoF1(nnQuarto);
+    float precoF2 = PrecificarQuartoF2(nnQuarto);
+
+    printf("Preço do quarto na Filial 1: %.2f\n", precoF1);
+    printf("Preço do quarto na Filial 2: %.2f\n", precoF2);
+
+    return 0;
+}
+
+
+
+
 // Função de comparação para ordenar as reservas com base na data de check-in
 
 
-void FazerReservasFuncionario(ReservaA reserva[], cadastroCliente cadastroCli[],  int *nReservas, int *numClientes)
-{
+void FazerReservasFuncionario(ReservaA reserva[], cadastroCliente cadastroCli[],  int *nReservas, int *numClientes){
     int p=1, opcreserva, quebraL=1, codcli, codirese, gapDia;
     float precoR;
     do
     {
         recebedordecheckin(reserva, nReservas);
-        if(filial==1);
-        precoR=PrecificarQuartoF1(numeroQuarto, precoR);
-        if(filial==2);
-        precoR=PrecificarQuartoF2(numeroQuarto, precoR);
+        if(filial==1)
+            precoR=PrecificarQuartoF1(numeroQuarto);
+        if(filial==2)
+            precoR=PrecificarQuartoF2(numeroQuarto);
         gapDia=(float)(diaDoAnoSaida-diaDoAnoEntrada);
         precoR*= gapDia;
         reserva[*nReservas].precoreserva = precoR;
@@ -755,9 +842,9 @@ void FazerReservasCliente(ReservaA reserva[], cadastroCliente cadastroCli[],  in
     {
         recebedordecheckin(reserva, nReservas);
         if(filial==1);
-        precoR=PrecificarQuartoF1(numeroQuarto, precoR);
+        precoR=PrecificarQuartoF1(numeroQuarto);
         if(filial==2);
-        precoR=PrecificarQuartoF2(numeroQuarto, precoR);
+        precoR=PrecificarQuartoF2(numeroQuarto);
         gapDia=(float)(diaDoAnoSaida-diaDoAnoEntrada);
         precoR*= gapDia;
         reserva[*nReservas].precoreserva = precoR;
@@ -1582,7 +1669,6 @@ void cartao(){
     scanf("%d",&codigo_seguranca);
     return;
 }
-
 
 void confirmarPagamento(){
     int opcao;
