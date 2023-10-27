@@ -4,9 +4,11 @@
 #include <locale.h>
 #include <time.h>
 #include <windows.h>
-
-int i, filial, CARGO, diaEntrada, mesEntrada, anoEntrada, diaSaida, mesSaida, anoSaida, diaDoAnoSaida, diaDoAnoEntrada, numeroQuarto,TipodeUsuario, multa, acessoglobal=1, ReservasConcluidas=0, opc1;
+//arrumar calculo de preco de reserva
+int i, filial, CARGO, diaEntrada, mesEntrada, anoEntrada, diaSaida, mesSaida, anoSaida, diaDoAnoSaida, diaDoAnoEntrada, numeroQuarto,TipodeUsuario, multa, acessoglobal=0, ReservasConcluidas=0, opc1;
 char NOME[50], CPF[12], SENHA[15];
+float precoS1=650.00, precoC1=850.00, precoM1=1150.00, precoP1=1750.00;
+float precoS2=450.00, precoC2=550.00, precoM2=750.00;
 typedef struct
 {
     char nome[50], cpf[12], senha[15];
@@ -31,12 +33,12 @@ typedef struct
     char nome[50], senha[15];
 } funcionarios;
 
-
+void LoginFuncionario(funcionarios Funcionario[], int *nFuncionarios);
+void definidorfuncionarios(funcionarios Funcionarios[], int *nFuncionarios);
 void ConcluirReserva(ReservaA reserva[], Pago reservac[], int *nReservas, int *nReserC);
 void ExibirReservasCliente(ReservaA reserva[], cadastroCliente cadastroCli[], int *nReservas);
 void Logincliente(cadastroCliente cadastroCli[], funcionarios Funcionario[],int *numClientes, int *nFuncionarios);
 int recebedordecheckin(ReservaA reserva[], int*nReservas);
-void definidorfuncionarios(funcionarios Funcionarios[], int *nFuncionarios);
 void exibirClientes(cadastroCliente clientes[], int *numClientes);
 void cadastrarCliente(cadastroCliente clientes[], int *numClientes);
 void FazerReservasFuncionario(ReservaA reserva[], cadastroCliente cadastroCli[],  int *nReservas, int *numClientes);
@@ -63,12 +65,15 @@ int main()
     Pago reservasC[1000];
     int numReservas = 0, nClientes =0, numFuncionarios =0, numReservasC=0;
     int  opc1 = 0, opc = 0, num;
+
+
     definidorfuncionarios(Funcionarios, &numFuncionarios);
     //=====================================================
     //=======================login=========================
     //definidorfuncionarios(Funcionarios, &numFuncionarios);
 
-    do{
+    do
+    {
         system("cls");
         printf("\n=============================================\n");
         printf("---Bem vindo a rede Hotel Algoritmo Suites---");
@@ -81,7 +86,7 @@ int main()
         printf("[5] Fechar programa.\n");
         scanf("%d", &TipodeUsuario);
         fflush(stdin);
-         if(TipodeUsuario==2)
+        if(TipodeUsuario==2)
             opc1=1;
         else if(TipodeUsuario==1)
             opc1=1;
@@ -92,26 +97,32 @@ int main()
         else if(TipodeUsuario==5)
             opc1=5;
 
-        switch(opc1){
+        switch(opc1)
+        {
         case 1:
 
             if(TipodeUsuario==1)
                 Logincliente(client, Funcionarios, &nClientes, &numFuncionarios);
             if(TipodeUsuario==2)
+            {
                 LoginFuncionario(Funcionarios, &numFuncionarios);
 
-            do{
+            }
+            do
+            {
                 system("cls");
                 printf("\n|------------------Bem vindo a rede Hotel Algoritmo Suites-------------------|\n");
-                printf("\n|1.Escolha 1 para a filial 1 - Master.............................|");
-                printf("\n|2.Escolha 2 para a filial 2 - Confort............................|");
-                printf("\n|3.Escolha 3 para Voltar..........................................|\n");
+                printf("\n|1.Escolha 1 para a filial (1) - Master......................................|");
+                printf("\n|2.Escolha 2 para a filial (2) - Confort.....................................|\n");
+                printf("\n|3.Escolha 3 para Voltar.....................................................|\n");
                 scanf("%d", &filial);
                 system("cls");
 
-                switch (filial){
+                switch (filial)
+                {
                 case 1:
-                    do{
+                    do
+                    {
                         system("cls");
                         if(CARGO==1)
                             mensagemMenuFun();
@@ -121,18 +132,20 @@ int main()
                         scanf("%d", &opc);
                         system("cls");
 
-                        switch (opc){
+                        switch (opc)
+                        {
                         case 1:
                             if(CARGO==1)
                             {
-                                do
-                                {
-                                    FazerReservasFuncionario(reservas, client, &numReservas, &nClientes);
-                                }
-                                while(acessoglobal==2);
+                                VerificarDisponibilidade(reservas, client, &numReservas);
+                                FazerReservasFuncionario(reservas, client, &numReservas, &nClientes);
+
                             }
                             if(CARGO==0)
+                            {
+                                VerificarDisponibilidade(reservas, client, &numReservas);
                                 FazerReservasCliente(reservas, client, &numReservas, &nClientes);
+                            }
                             break;
                         case 2:
                             //=====================================================
@@ -155,6 +168,7 @@ int main()
                             }
                             if(CARGO==0)
                                 VerificarDisponibilidade(reservas, client, &numReservas);
+                            system("pause");
                             break;
                         case 4:
                             if(CARGO==1)
@@ -188,9 +202,16 @@ int main()
                                 printf("opcao invalida");
                             break;
                         case 8:
-                                formaPagamento();
+                            formaPagamento(nClientes, client, reservas);
+                            confirmarPagamento(reservas, &numReservas );
                             break;
                         case 9:
+                            if(CARGO==1)
+                                Alteradordepreco();
+                            if(CARGO==0)
+                                printf("opcao invalida");
+                            break;
+                        case 10:
                             definirCorConsole();
                             break;
                         default:
@@ -199,11 +220,113 @@ int main()
                         case 13:
                             break;
                         }
-                    }while (opc != 13);
+                    }
+                    while (opc != 13);
                     break;
                 case 2:
+                    do
+                    {
+                        system("cls");
+                        if(CARGO==1)
+                            mensagemMenuFun();
+                        if(CARGO==0)
+                            mensagemMenuCli();
 
+                        scanf("%d", &opc);
+                        system("cls");
+
+                        switch (opc)
+                        {
+                        case 1:
+                            if(CARGO==1)
+                            {
+                                VerificarDisponibilidade(reservas, client, &numReservas);
+                                FazerReservasFuncionario(reservas, client, &numReservas, &nClientes);
+
+                            }
+                            if(CARGO==0)
+                            {
+                                VerificarDisponibilidade(reservas, client, &numReservas);
+                                FazerReservasCliente(reservas, client, &numReservas, &nClientes);
+                            }
+                            break;
+                        case 2:
+                            //=====================================================
+                            //=====================clientes========================
+                            if(CARGO==1)
+                                cadastrarCliente(client, &nClientes);
+                            if(CARGO==0)
+                            {
+                                ExibirReservasCliente(reservas, client, &numReservas);
+                                system("pause");
+                            }
+                            break;
+                        case 3:
+                            //=====================================================
+                            //====================relatorio========================
+                            if(CARGO==1)
+                            {
+                                ExibirReservas(reservas, client, &numReservas);
+                                system("pause");
+                            }
+                            if(CARGO==0)
+                                VerificarDisponibilidade(reservas, client, &numReservas);
+                            system("pause");
+                            break;
+                        case 4:
+                            if(CARGO==1)
+                                ConcluirReserva(reservas,reservasC, &numReservas, &numReservasC);
+                            if(CARGO==0)
+                                printf("opcao invalida");
+
+                            break;
+                        case 5:
+                            if(CARGO==1)
+                            {
+                                ExibirReservas(reservas, client, &numReservas);
+                                CancelarReserva(reservas, &numReservas);
+                            }
+                            if(CARGO==0)
+                                printf("opcao invalida");
+                            break;
+                        case 6:
+                            if(CARGO==1)
+                            {
+                                exibirClientes(client, &nClientes);
+                                system("pause");
+                            }
+                            if(CARGO==0)
+                                printf("opcao invalida");
+                            break;
+                        case 7:
+                            if(CARGO==1)
+                                LeitorFaturamento(reservas,reservasC, &numReservas, &numReservasC);
+                            if(CARGO==0)
+                                printf("opcao invalida");
+                            break;
+                        case 8:
+                            formaPagamento(nClientes, client, reservas);
+                            confirmarPagamento(reservas, &numReservas);
+                            break;
+                        case 9:
+                            if(CARGO==1)
+                                Alteradordepreco();
+                            if(CARGO==0)
+                                printf("opcao invalida");
+                            break;
+                        case 10:
+                            definirCorConsole();
+                            break;
+                        default:
+                            printf("opcao invalida");
+                            break;
+                        case 13:
+                            break;
+                        }
+                    }
+                    while (opc != 13);
                     break;
+
                 case 3:
                     break;
                 default:
@@ -212,7 +335,8 @@ int main()
                     system("cls");
                     break;
                 }
-            }while(filial != 3);
+            }
+            while(filial != 3);
             break;
         case 2:
             LoginFuncionario(Funcionarios, &numFuncionarios);
@@ -226,11 +350,16 @@ int main()
             printf("[2]FILIAL – COMFORT\n");
             scanf("%d", &num);
 
-            if(num == 1){
+            if(num == 1)
+            {
                 descricaoQrtF1();
-            }else if(num == 2){
+            }
+            else if(num == 2)
+            {
                 descricaoQrtF2();
-            } else {
+            }
+            else
+            {
                 printf("Escolha invalida!\n\n");
                 system("pause");
             }
@@ -243,45 +372,54 @@ int main()
             printf("\nOpção Invalida!\n");
             break;
         }
-    }while(opc1!=5);
+    }
+    while(opc1!=5);
     //=====================================================
     //=====================Quartos=========================
 
     return 0;
 }
 
-void Logincliente(cadastroCliente cadastroCli[], funcionarios Funcionario[],int *numClientes, int *nFuncionarios){
+void Logincliente(cadastroCliente cadastroCli[], funcionarios Funcionario[],int *numClientes, int *nFuncionarios)
+{
     system("cls");
     int procurarcliente, acesso;
     char nome1[50];
     char senhaA[15];
-
-    do{
-        if(*numClientes!=0){
+    printf("\nLogin de Cliente!\n");
+    do
+    {
+        if(*numClientes!=0)
+        {
             printf("\nUsuario: ");
             scanf("%s", &nome1);
             printf("Senha: ");
             scanf("%s", &senhaA);
 
-            for(i=0; i<*numClientes; i++){
-                if(strcmp(nome1,cadastroCli[i].nome)==0){
+            for(i=0; i<*numClientes; i++)
+            {
+                if(strcmp(nome1,cadastroCli[i].nome)==0)
+                {
                     procurarcliente=i;
                     acesso=1;
-                    acessoglobal=2;
+
                 }
             }
-            for(i=0; i<*numClientes; i++){
-                if(strcmp(senhaA,cadastroCli[i].senha)==0){
+            for(i=0; i<*numClientes; i++)
+            {
+                if(strcmp(senhaA,cadastroCli[i].senha)==0)
+                {
                     procurarcliente=i;
                     acesso=1;
-                    acessoglobal=2;
+
                 }
             }
             CARGO=cadastroCli[procurarcliente].cargo;
-        }else if(*numClientes==0){
+        }
+        else if(*numClientes==0)
+        {
             printf("\nAinda não há Clientes!\n");
             cadastrarCliente(cadastroCli, numClientes);
-            acessoglobal=2;
 
         }
     }
@@ -291,38 +429,48 @@ void Logincliente(cadastroCliente cadastroCli[], funcionarios Funcionario[],int 
     strcpy(CPF,cadastroCli[procurarcliente].cpf);
 }
 
-LoginFuncionario(funcionarios Funcionario[], int *nFuncionarios)
+void LoginFuncionario(funcionarios Funcionario[], int *nFuncionarios)
 {
-    int procurarfun, procurarcliente;
+
+    int procurarfun = 0, procurarcliente = -1;
     char nome1[50], senhaA[15];
+    printf("\nLogin de Colaborador!\n");
+    int i;
 
     do
     {
         printf("\nUsuario: ");
-        scanf("%s", &nome1);
+        scanf("%s", nome1);
         printf("Senha: ");
-        scanf("%s", &senhaA);
+        scanf("%s", senhaA);
 
-        for (int i = 0; i < nFuncionarios; i++)
+        for (i = 0; i < *nFuncionarios; i++)
         {
             if (strcmp(nome1, Funcionario[i].nome) == 0 && strcmp(senhaA, Funcionario[i].senha) == 0)
             {
                 procurarfun = 1;
-                procurarcliente=i;
+                procurarcliente = i;
+                acessoglobal = 1;
                 break;
             }
         }
 
+        if (procurarcliente == -1)
+        {
+            printf("Nome de usuario ou senha inválido. Por Favor tente novamente.\n");
+        }
     }
-    while( procurarfun != 1);
-    CARGO=Funcionario[procurarcliente].cargo;
-    strcpy(NOME,Funcionario[procurarcliente].nome);
-    strcpy(SENHA,Funcionario[procurarcliente].senha);
+    while (procurarfun != 1);
+
+    CARGO = Funcionario[procurarcliente].cargo;
+    strcpy(NOME, Funcionario[procurarcliente].nome);
+    strcpy(SENHA, Funcionario[procurarcliente].senha);
 }
 
 //============================================================================================
 //========================================Clientes===========================================
-void cadastrarCliente(cadastroCliente client[], int *nClientes){
+void cadastrarCliente(cadastroCliente client[], int *nClientes)
+{
     system("cls");
 
     cadastroCliente novoCliente;
@@ -370,9 +518,9 @@ void mensagemMenuFun()
 {
     printf(" \n______________________________________________________ ");
     if(filial==1)
-    printf("\n|-------Bem-vindo ao Algoritmo Suites Master-----------|");
+        printf("\n|-------Bem-vindo ao Algoritmo Suites Master-----------|");
     if(filial==2)
-    printf("\n|-------Bem-vindo ao Algoritmo Suites Confort----------|");
+        printf("\n|-------Bem-vindo ao Algoritmo Suites Confort----------|");
     printf("\n ______________________________________________________ ");
     printf("\n|--------------------Menu Colaborador------------------|");
     printf("\n Olá, %s", NOME);
@@ -385,28 +533,31 @@ void mensagemMenuFun()
     printf("\n6|Escolha 6 para ver clientes..........................|");
     printf("\n7|Escolha 7 para ver relatorio de faturamento..........|");
     printf("\n8|Escolha 8 para realizar pagamento....................|");
-    printf("\n9|Escolha 9 para alterar tema do sistema...............|");
+    printf("\n9|Escolha 9 para alterar preço de estadia.............|\n");
+    printf("\n10|Escolha 10 para alterar tema do sistema.............|");
     printf("\n\n13|Escolha 13 voltar.................................|\n\n");
 }
 
-void mensagemMenuCli(){
+void mensagemMenuCli()
+{
     printf(" \n______________________________________________________ ");
     if(filial==1)
-    printf("\n|-------Bem-vindo ao Algoritmo Suites Master-----------|");
+        printf("\n|-------Bem-vindo ao Algoritmo Suites Master-----------|");
     if(filial==2)
-    printf("\n|-------Bem-vindo ao Algoritmo Suites Confort----------|");
+        printf("\n|-------Bem-vindo ao Algoritmo Suites Confort----------|");
     printf("\n ______________________________________________________ ");
     printf("\n|-------------------------Menu-------------------------|");
     printf("\n Olá, %s\tPortador do cpf %s", NOME, CPF);
     printf("\n|______________________________________________________|\n");
     printf("\n1|Escolha 1 para fazer uma reserva.....................|");
     printf("\n2|Escolha 2 para visualizar as minhas reservas.........|");
-    printf("\n2|Escolha 3 para visualizar estadias ja reservadas.....|");
-    printf("\no|Escolha 9 para alterar tema do sistema...............|");
+    printf("\n2|Escolha 3 para visualizar estadias ja reservadas.....|\n");
+    printf("\n10|Escolha 10 para alterar tema do sistema.............|");
     printf("\n\n13|Escolha 13 para voltar............................|\n\n");
 }
 
-void descricaoQrtF1(){
+void descricaoQrtF1()
+{
     system("cls");
     printf("\n_________________________________________________________________________________________\n");
     printf("=============================REDE DE HOTEL ALGORITMO SUÍTES==============================\n");
@@ -419,7 +570,7 @@ void descricaoQrtF1(){
            \nEstão em andares mais baixos, com vista para o jardim. Piso vinílico, frigobar, tv \
            \npor assinatura, banheiro completo com amenities de banho e secador de cabelo. \
            \nOpção: cama Queen Size ou duas camas de solteiro. Café da manhã e wifi são cortesia.");
-    printf("\n\n__________________________________________________________________Preço da diária: 650,00\n");
+    printf("\n\n__________________________________________________________________Preço da diária: R$%2.f\n,", precoS1);
     printf("=========================================================================================\n\n");
 
     printf("======================================COMFORT=============================================\n");
@@ -427,7 +578,7 @@ void descricaoQrtF1(){
            \nEstão em andares intermediários, com vista para a cidade. Piso vinílico, frigobar, \
            \ntábua de passar e ferro, tv por assinatura, banheiro completo com amenities de banho, \
            \nsecador de cabelo e roupão. Cama Queen Size. Café da manhã e wifi são cortesia. ");
-    printf("\n\n__________________________________________________________________Preço da diária: 850,00\n");
+    printf("\n\n__________________________________________________________________Preço da diária: R$%2.f\n", precoC1);
     printf("=========================================================================================\n\n");
 
     printf("\n======================================MASTER==============================================\n");
@@ -436,7 +587,7 @@ void descricaoQrtF1(){
            \ntv por assinatura e plataforma de streaming. Banheiro completo com amenities L’Occitane \
            \nde banho, secador de cabelo, roupão e chinelo de quarto. Cama Queen Size. \
            \nCafé da manhã e wifi são cortesia.");
-    printf("\n\n__________________________________________________________________Preço da diária: 1150,00\n");
+    printf("\n\n__________________________________________________________________Preço da diária: R$%2.f\n", precoM1);
     printf("=========================================================================================\n\n");
 
     printf("\n===================================PRESIDENCIAL===========================================\n");
@@ -445,14 +596,15 @@ void descricaoQrtF1(){
            \ntv por assinatura e plataforma de streaming, máquina de café Nespresso. \
            \nBanheiro completo com hidromassagem, amenities de banho L’Occitane, secador de cabelo, \
            \nroupão e chinelo de quarto. Cama King Size. Café da manhã e wifi são cortesia.");
-    printf("\n\n__________________________________________________________________Preço da diária: 1750,00\n");
+    printf("\n\n__________________________________________________________________Preço da diária: R$%2.f\n", precoP1);
     printf("=========================================================================================\n\n");
 
     system("pause");
     return;
 }
 
-void descricaoQrtF2(){
+void descricaoQrtF2()
+{
     system("cls");
     printf("\n_________________________________________________________________________________________\n");
     printf("=============================REDE DE HOTEL ALGORITMO SUÍTES==============================\n");
@@ -465,7 +617,7 @@ void descricaoQrtF2(){
            \nmais baixos, com vista para o jardim. Piso vinílico, frigobar, tv por assinatura, \
            \nbanheiro completo com amenities de banho e secador de cabelo. Opção: cama de casal ou \
            \nduas camas de solteiro. Café da manhã e wifi são cortesia.");
-    printf("\n\n__________________________________________________________________Preço da diária: 450,00\n");
+    printf("\n\n__________________________________________________________________Preço da diária: R$%2.f\n",precoS2);
     printf("=========================================================================================\n\n");
 
     printf("======================================COMFORT=============================================\n");
@@ -473,7 +625,7 @@ void descricaoQrtF2(){
            \nEstão em andares intermediários, com vista para a cidade. Piso vinílico, frigobar, \
            \ntv por assinatura, banheiro completo com amenities de banho. Cama Queen Size. \
            \nCafé da manhã e wifi são cortesia. ");
-    printf("\n\n__________________________________________________________________Preço da diária: 550,00\n");
+    printf("\n\n__________________________________________________________________Preço da diária: R$%2.f\n",precoC2);
     printf("=========================================================================================\n\n");
 
     printf("\n======================================MASTER=============================================\n");
@@ -481,7 +633,7 @@ void descricaoQrtF2(){
            \nEstão em andares altos, com vista para a cidade. Piso vinílico, frigobar, \
            \ntv por assinatura e máquina de café Nespresso. Banheiro completo com amenities, \
            \nsecador de cabelo e roupão. Cama King Size. Café da manhã e wifi são cortesia. ");
-    printf("\n\n__________________________________________________________________Preço da diária: 750,00\n");
+    printf("\n\n__________________________________________________________________Preço da diária: R$%2.f\n", precoM2);
     printf("=========================================================================================\n\n");
 
     system("pause");
@@ -626,146 +778,141 @@ int VerificarSobreposicao(ReservaA reserva[], int nReservas, int numeroQuarto, i
     }
     return 0; // Sem sobreposição de datas
 }
+int PrecificarQuartoF1(int nnQuarto, float preco)
+{
+    if(nnQuarto>=1 && nnQuarto<=3)
+    {
+        preco=precoS1;
+    }
+    if(nnQuarto>=4 && nnQuarto<=6)
+    {
+        preco=precoC1;
+    }
+    if(nnQuarto>=7 && nnQuarto<=9)
+    {
+        preco=precoM1;
+    }
+    if(nnQuarto>=10 && nnQuarto<=12)
+    {
+        preco=precoP1;
+    }
+    return preco;
+}
+void Alteradordepreco()
+{
+    int Estadia;
+    float novopreco;
+    do
+    {
+        printf("\nQual Estadia, voce deseja alterar o preço?\n");
+        printf("[1]Standard\n");
+        printf("[2]Comfort\n");
+        printf("[3]Master\n");
+        if(filial==1)
+            printf("[4]Presidencial\n");
+        printf("[5] Voltar\n");
+        scanf("%d", &Estadia);
+        switch(Estadia)
+        {
+        case 1:
+            if(filial==1)
+            {
+                printf("\nPor favor insira o novo preço da Estadia Standard");
+                scanf("%f", &novopreco);
+                precoS1=novopreco;
+            }
+            if(filial==2)
+            {
+                printf("\nPor favor insira o novo preço da Estadia Standard");
+                scanf("%f", &novopreco);
+                precoS2=novopreco;
 
-typedef struct {
-    float precoS1;
-    float precoC1;
-    float precoM1;
-    float precoP1;
-} PrecosFilial1;
+            }
+            break;
+        case 2:
+            if(filial==1)
+            {
+                printf("\nPor favor insira o novo preço da Estadia Comfort");
+                scanf("%f", &novopreco);
+                precoC1=novopreco;
 
-typedef struct {
-    float precoS2;
-    float precoC2;
-    float precoM2;
-} PrecosFilial2;
+            }
+            if(filial==2)
+            {
+                printf("\nPor favor insira o novo preço da Estadia Comfort");
+                scanf("%f", &novopreco);
+                precoC2=novopreco;
 
-PrecosFilial1 precosF1;
-PrecosFilial2 precosF2;
+            }
+            break;
+        case 3:
+            if(filial==1)
+            {
+                printf("\nPor favor insira o novo preço da Estadia Master");
+                scanf("%f", &novopreco);
+                precoM1=novopreco;
 
-void InicializarPrecos() {
-    // Inicialize os preços das filiais aqui
-    precosF1.precoS1 = 650.00;
-    precosF1.precoC1 = 850.00;
-    precosF1.precoM1 = 1150.00;
-    precosF1.precoP1 = 1750.00;
+            }
+            if(filial==2)
+            {
+                printf("\nPor favor insira o novo preço da Estadia Master");
+                scanf("%f", &novopreco);
+                precoM2=novopreco;
 
-    precosF2.precoS2 = 450.00;
-    precosF2.precoC2 = 550.00;
-    precosF2.precoM2 = 750.00;
+            }
+            break;
+        case 4:
+            if(filial==1)
+            {
+                printf("\nPor favor insira o novo preço da Estadia Presidencial");
+                scanf("%f", &novopreco);
+                precoP1=novopreco;
+
+            }
+            if(filial==2)
+                printf("\nOpção Invalida!\n");
+            break;
+        case 5:
+            break;
+        default:
+            printf("\nOpção Invalida!\n");
+        }
+    }
+    while(Estadia!=5);
+    return;
 }
 
-float PrecificarQuartoF1(int nnQuarto) {
-    if (nnQuarto >= 1 && nnQuarto <= 3) {
-        return precosF1.precoS1;
+int PrecificarQuartoF2(int nnQuarto, float preco)
+{
+    if(nnQuarto>=1 && nnQuarto<=3)
+    {
+        preco=precoS2;
     }
-    if (nnQuarto >= 4 && nnQuarto <= 6) {
-        return precosF1.precoC1;
+    if(nnQuarto>=4 && nnQuarto<=6)
+    {
+        preco=precoC2;
     }
-    if (nnQuarto >= 7 && nnQuarto <= 9) {
-        return precosF1.precoM1;
+    if(nnQuarto>=7 && nnQuarto<=9)
+    {
+        preco=precoM2;
     }
-    if (nnQuarto >= 10 && nnQuarto <= 12) {
-        return precosF1.precoP1;
-    }
-    return 0.0; // Retorna um valor padrão caso o número do quarto não corresponda a nenhum caso.
+
+    return preco;
 }
-
-float PrecificarQuartoF2(int nnQuarto) {
-    if (nnQuarto >= 1 && nnQuarto <= 3) {
-        return precosF2.precoS2;
-    }
-    if (nnQuarto >= 4 && nnQuarto <= 6) {
-        return precosF2.precoC2;
-    }
-    if (nnQuarto >= 7 && nnQuarto <= 9) {
-        return precosF2.precoM2;
-    }
-    return 0.0; // Retorna um valor padrão caso o número do quarto não corresponda a nenhum caso.
-}
-
-
-typedef struct {
-    float precoS1;
-    float precoC1;
-    float precoM1;
-    float precoP1;
-} PrecosFilial1;
-
-typedef struct {
-    float precoS2;
-    float precoC2;
-    float precoM2;
-} PrecosFilial2;
-
-
-float PrecificarQuartoF1(int nnQuarto) {
-    // Inicialize os preços da Filial 1 aqui
-    precosF1.precoS1 = 650.00;
-    precosF1.precoC1 = 850.00;
-    precosF1.precoM1 = 1150.00;
-    precosF1.precoP1 = 1750.00;
-
-    if (nnQuarto >= 1 && nnQuarto <= 3) {
-        return precosF1.precoS1;
-    }
-    if (nnQuarto >= 4 && nnQuarto <= 6) {
-        return precosF1.precoC1;
-    }
-    if (nnQuarto >= 7 && nnQuarto <= 9) {
-        return precosF1.precoM1;
-    }
-    if (nnQuarto >= 10 && nnQuarto <= 12) {
-        return precosF1.precoP1;
-    }
-    return 0.0; // Retorna um valor padrão caso o número do quarto não corresponda a nenhum caso.
-}
-
-float PrecificarQuartoF2(int nnQuarto) {
-    // Inicialize os preços da Filial 2 aqui
-    precosF2.precoS2 = 450.00;
-    precosF2.precoC2 = 550.00;
-    precosF2.precoM2 = 750.00;
-
-    if (nnQuarto >= 1 && nnQuarto <= 3) {
-        return precosF2.precoS2;
-    }
-    if (nnQuarto >= 4 && nnQuarto <= 6) {
-        return precosF2.precoC2;
-    }
-    if (nnQuarto >= 7 && nnQuarto <= 9) {
-        return precosF2.precoM2;
-    }
-    return 0.0; // Retorna um valor padrão caso o número do quarto não corresponda a nenhum caso.
-}
-
-int main() {
-    int nnQuarto = 4;
-    float precoF1 = PrecificarQuartoF1(nnQuarto);
-    float precoF2 = PrecificarQuartoF2(nnQuarto);
-
-    printf("Preço do quarto na Filial 1: %.2f\n", precoF1);
-    printf("Preço do quarto na Filial 2: %.2f\n", precoF2);
-
-    return 0;
-}
-
-
-
-
 // Função de comparação para ordenar as reservas com base na data de check-in
 
 
-void FazerReservasFuncionario(ReservaA reserva[], cadastroCliente cadastroCli[],  int *nReservas, int *numClientes){
+void FazerReservasFuncionario(ReservaA reserva[], cadastroCliente cadastroCli[],  int *nReservas, int *numClientes)
+{
     int p=1, opcreserva, quebraL=1, codcli, codirese, gapDia;
     float precoR;
     do
     {
         recebedordecheckin(reserva, nReservas);
         if(filial==1)
-            precoR=PrecificarQuartoF1(numeroQuarto);
+            precoR=PrecificarQuartoF1(numeroQuarto, precoR);
         if(filial==2)
-            precoR=PrecificarQuartoF2(numeroQuarto);
+            precoR=PrecificarQuartoF2(numeroQuarto, precoR);
         gapDia=(float)(diaDoAnoSaida-diaDoAnoEntrada);
         precoR*= gapDia;
         reserva[*nReservas].precoreserva = precoR;
@@ -776,7 +923,7 @@ void FazerReservasFuncionario(ReservaA reserva[], cadastroCliente cadastroCli[],
         do
         {
             printf("\nVoce deseja:\n");
-            printf("\n 1 - Escoher um cliente?");
+            printf("\n 1 - Escolher um cliente?");
             printf("\n 2 - Cadastrar novo cliente?\n");
             scanf("%d", &opcreserva);
 
@@ -842,9 +989,9 @@ void FazerReservasCliente(ReservaA reserva[], cadastroCliente cadastroCli[],  in
     {
         recebedordecheckin(reserva, nReservas);
         if(filial==1);
-        precoR=PrecificarQuartoF1(numeroQuarto);
+        precoR=PrecificarQuartoF1(numeroQuarto, precoR);
         if(filial==2);
-        precoR=PrecificarQuartoF2(numeroQuarto);
+        precoR=PrecificarQuartoF2(numeroQuarto, precoR);
         gapDia=(float)(diaDoAnoSaida-diaDoAnoEntrada);
         precoR*= gapDia;
         reserva[*nReservas].precoreserva = precoR;
@@ -927,7 +1074,6 @@ void VerificarDisponibilidade(ReservaA reserva[], cadastroCliente cadastroCli[],
         {
             diaDoAnoParaData(reserva[i].diaDoAnoEntrada, &anoE, &DiaE, &MesE);
             diaDoAnoParaData(reserva[i].diaDoAnoSaida, &anoS, &DiaS, &MesS);
-            printf("Reservado por outro Cliente\n");
             printf("Número do Quarto: %2.d\n", reserva[i].numeroQuarto);
             printf("Data de Entrada: %02.d/%02.d/%d - Data de Saída: %02.d/%02.d/%d\n",DiaE, MesE, reserva[i].AnoEntrada,DiaS,MesS, reserva[i].AnoSaida);
             printf("\n========================================================\n");
@@ -964,7 +1110,7 @@ void VerificarDisponibilidade(ReservaA reserva[], cadastroCliente cadastroCli[],
 
     if(*nReservas==0)
         printf("\nNão há reservas!\n");
-    system("pause");
+
 }
 void ExibirReservasCliente(ReservaA reserva[], cadastroCliente cadastroCli[], int *nReservas)
 {
@@ -1067,9 +1213,10 @@ void CancelarReserva(ReservaA reserva[], int *nReservas)
     if (acho==1)
     {
         MoverReservas(reserva, nReservas);
-    printf("\n[1]Por favor insira 1 caso seja necessario aplicar multa!\n[1](cancelamento de reserva sendo feito depois de 20 dias de antecedencia)[1]\n");
-    printf("[0]Insira 0 caso nao seja necessario aplica multa[0]\n");
-    scanf("%d",&caso);}
+        printf("\n[1]Por favor insira 1 caso seja necessario aplicar multa!\n[1](cancelamento de reserva sendo feito depois de 20 dias de antecedencia)[1]\n");
+        printf("[0]Insira 0 caso nao seja necessario aplica multa[0]\n");
+        scanf("%d",&caso);
+    }
     if(caso==1)
     {
         for (i = 0; i < *nReservas; i++)
@@ -1086,7 +1233,7 @@ void CancelarReserva(ReservaA reserva[], int *nReservas)
         printf("Reserva cancelada com sucesso.\n");
         system("pause");
     }
-    else
+    if(acho==0)
     {
         printf("Reserva nao encontrada.\n");
         system("pause");
@@ -1115,20 +1262,22 @@ void ConcluirReserva(ReservaA reserva[], Pago reservc[], int *nReservas, int *nR
     {
         if (reserva[i].CodRes == codigoreserv)
         {
-            if(reserva[i].pg==1){
-            reservc[*nReserC].AnoEntrada = reserva[i].AnoEntrada;
-            reservc[*nReserC].AnoSaida = reserva[i].AnoSaida;
-            reservc[*nReserC].diaDoAnoEntrada = reserva[i].diaDoAnoEntrada;
-            reservc[*nReserC].diaDoAnoSaida = reserva[i].diaDoAnoSaida;
-            reservc[*nReserC].numeroQuarto = reserva[i].numeroQuarto;
-            reservc[*nReserC].precoreserva = reserva[i].precoreserva;
-            reservc[*nReserC].fillial = reserva[i].fillial;
-            (*nReserC)++;
-            memset(&reserva[i], 0, sizeof(ReservaA));
-            acho = 1;
-            break;
+            if(reserva[i].pg==1)
+            {
+                reservc[*nReserC].AnoEntrada = reserva[i].AnoEntrada;
+                reservc[*nReserC].AnoSaida = reserva[i].AnoSaida;
+                reservc[*nReserC].diaDoAnoEntrada = reserva[i].diaDoAnoEntrada;
+                reservc[*nReserC].diaDoAnoSaida = reserva[i].diaDoAnoSaida;
+                reservc[*nReserC].numeroQuarto = reserva[i].numeroQuarto;
+                reservc[*nReserC].precoreserva = reserva[i].precoreserva;
+                reservc[*nReserC].fillial = reserva[i].fillial;
+                (*nReserC)++;
+                memset(&reserva[i], 0, sizeof(ReservaA));
+                acho = 1;
+                break;
             }
-            else{
+            else
+            {
                 printf("\nOperação Cancelada : Reserva ainda não paga!\n");
             }
         }
@@ -1228,50 +1377,50 @@ void LeitorFaturamento(ReservaA reserva[],Pago reserc[], int *nReservas, int *nR
 
         i++;
     }
-i = 0;
+    i = 0;
 
     while (i < *nReserc)
     {
 
-                somapg += reserc[i].precoreserva;
-                contreservapg++;
+        somapg += reserc[i].precoreserva;
+        contreservapg++;
 
-                if (reserc[i].numeroQuarto >= 1 && reserc[i].numeroQuarto <= 3)
-                {
-                    somaS += reserc[i].precoreserva;
-                    if(reserc[i].fillial==1)
-                        somafS+=reserc[i].precoreserva;
-                    if(reserc[i].fillial == 2)
-                        soma2S += reserc[i].precoreserva;
-                    contS++;
-                }
-                else if (reserc[i].numeroQuarto >= 4 && reserc[i].numeroQuarto <= 6)
-                {
-                    somaC += reserc[i].precoreserva;
-                    if(reserc[i].fillial==1)
-                        somaCf+=reserc[i].precoreserva;
-                    if(reserc[i].fillial == 2)
-                        soma2C += reserc[i].precoreserva;
-                    contC++;
-                }
-                else if (reserc[i].numeroQuarto >= 7 && reserc[i].numeroQuarto <= 9)
-                {
-                    somaM += reserc[i].precoreserva;
-                    if(reserc[i].fillial==1)
-                        somaMf+=reserc[i].precoreserva;
-                    if(reserc[i].fillial == 2)
-                        somaM2 += reserc[i].precoreserva;
-                    contM++;
-                }
-                else if (reserc[i].numeroQuarto >= 10 && reserc[i].numeroQuarto <= 12)
-                {
-                    somaP += reserc[i].precoreserva;
-                    if(reserc[i].fillial==1)
-                        somaPf+=reserc[i].precoreserva;
-                    if(reserc[i].fillial == 2)
-                        somaP2 += reserc[i].precoreserva;
-                    contP++;
-                }
+        if (reserc[i].numeroQuarto >= 1 && reserc[i].numeroQuarto <= 3)
+        {
+            somaS += reserc[i].precoreserva;
+            if(reserc[i].fillial==1)
+                somafS+=reserc[i].precoreserva;
+            if(reserc[i].fillial == 2)
+                soma2S += reserc[i].precoreserva;
+            contS++;
+        }
+        else if (reserc[i].numeroQuarto >= 4 && reserc[i].numeroQuarto <= 6)
+        {
+            somaC += reserc[i].precoreserva;
+            if(reserc[i].fillial==1)
+                somaCf+=reserc[i].precoreserva;
+            if(reserc[i].fillial == 2)
+                soma2C += reserc[i].precoreserva;
+            contC++;
+        }
+        else if (reserc[i].numeroQuarto >= 7 && reserc[i].numeroQuarto <= 9)
+        {
+            somaM += reserc[i].precoreserva;
+            if(reserc[i].fillial==1)
+                somaMf+=reserc[i].precoreserva;
+            if(reserc[i].fillial == 2)
+                somaM2 += reserc[i].precoreserva;
+            contM++;
+        }
+        else if (reserc[i].numeroQuarto >= 10 && reserc[i].numeroQuarto <= 12)
+        {
+            somaP += reserc[i].precoreserva;
+            if(reserc[i].fillial==1)
+                somaPf+=reserc[i].precoreserva;
+            if(reserc[i].fillial == 2)
+                somaP2 += reserc[i].precoreserva;
+            contP++;
+        }
         i++;
     }
 
@@ -1290,21 +1439,21 @@ i = 0;
     printf("\n===========================\n");
     printf("\nFaturamento Standard");
     printf("\nRecebido");
-    printf("\nR$%.2f\tFilial 1:R$.2f\tFilial 2:R$.2f", somaS, somafS,soma2S);
+    printf("\nR$%.2f\tFilial 1:R$%.2f\tFilial 2:R$%.2f", somaS, somafS,soma2S);
     printf("\nA Receber");
     printf("\nR$%.2f", somanS);
     printf("\nForam %d reservas\n", contS);
     printf("\n===========================\n");
     printf("\nFaturamento Confort");
     printf("\nRecebido");
-    printf("\nR$%.2f\tFilial 1:R$.2f\tFilial 2:R$.2f", somaC, somaCf,soma2C);
+    printf("\nR$%.2f\tFilial 1:R$%.2f\tFilial 2:R$%.2f", somaC, somaCf,soma2C);
     printf("\nA Receber");
     printf("\nR$%.2f", somanC);
     printf("\nForam %d reservas\n", contC);
     printf("\n===========================\n");
     printf("\nFaturamento Master");
     printf("\nRecebido");
-    printf("\nR$%.2f\tFilial 1:R$.2f\tFilial 2:R$.2f", somaM, somaMf,somaM2);
+    printf("\nR$%.2f\tFilial 1:R$%.2f\tFilial 2:R$%.2f", somaM, somaMf,somaM2);
     printf("\nA Receber");
     printf("\nR$%.2f", somanM);
     printf("\nForam %d reservas\n", contM);
@@ -1362,53 +1511,59 @@ void definidorfuncionarios(funcionarios Funcionarios[], int *nFuncionarios)
     strcpy(Funcionarios[0].nome,"Dorcas");
     strcpy(Funcionarios[0].senha,"0000");
     Funcionarios[0].cargo=1;
-
+    (*nFuncionarios)++;
     strcpy(Funcionarios[1].nome,"Murilo");
     strcpy(Funcionarios[1].senha,"123");
     Funcionarios[1].cargo=1;
+    (*nFuncionarios)++;
 
     strcpy(Funcionarios[2].nome,"Adrian");
     strcpy(Funcionarios[2].senha,"123");
     Funcionarios[2].cargo=1;
+    (*nFuncionarios)++;
 
     strcpy(Funcionarios[3].nome,"Joao");
     strcpy(Funcionarios[3].senha,"123");
     Funcionarios[3].cargo=1;
+    (*nFuncionarios)++;
 
     strcpy(Funcionarios[4].nome,"Giovana");
     strcpy(Funcionarios[4].senha,"123");
     Funcionarios[4].cargo=1;
+    (*nFuncionarios)++;
 }
 
 
 int recebedordecheckin(ReservaA reserva[], int*nReservas)
-{ int VerOut, VerSob, valin, compin, valout, compout;
+{
+    int VerOut=0, VerSob, valin, compin, valout, compout;
     do
     {
         printf("\n---------------Fazer uma Reserva---------------\n");
-        printf("\nDigite o numero do quarto:\n");
-        printf("\n============STANDARD===========\n");
+        printf("\n===============STANDARD==============\n");
         printf("[1]Quarto\t");
         printf("[2]Quarto\t");
         printf("[3]Quarto");
-        printf("\n============COMFORT============\n");
+        printf("\n===============COMFORT===============\n");
         printf("[4]Quarto\t");
         printf("[5]Quarto\t");
         printf("[6]Quarto");
-        printf("\n============MASTER=============\n");
+        printf("\n===============MASTER================\n");
         printf("[7]Quarto\t");
         printf("[8]Quarto\t");
         printf("[9]Quarto");
-        printf("\n==========PRESIDENCIAL=========\n");
+        printf("\n=============PRESIDENCIAL============\n");
         printf("[10]Quarto\t");
         printf("[11]Quarto\t");
         printf("[12]Quarto");
+        printf("\nDigite o numero do quarto:\n");
 
         scanf("%d", &numeroQuarto);
         fflush(stdin);
-        system("cls");
 
-    }while(numeroQuarto < 1 || numeroQuarto > 12);
+
+    }
+    while(numeroQuarto < 1 || numeroQuarto > 12);
     do
     {
         do
@@ -1455,7 +1610,15 @@ int recebedordecheckin(ReservaA reserva[], int*nReservas)
             {
                 VerOut = 1;
             }
-            else if (VerOut != 1)
+            else if (anoEntrada<=anoSaida)
+            {
+                VerOut = 1;
+            }
+            if (anoEntrada>anoSaida)
+            {
+                VerOut=0;
+            }
+            if (VerOut != 1)
             {
                 printf("\n\t|xxxxx|-Data de Check-out Inválida (data de check-out menor que à data de check-in)-|xxxxx|\n");
                 printf("\nPor Favor Insira Novamente:\n");
@@ -1474,7 +1637,10 @@ int recebedordecheckin(ReservaA reserva[], int*nReservas)
     while (VerSob != 0);
 }
 
-int formaPagamento(){
+int boleto(nClientes, client, reservas);
+int formaPagamento(int nClientes, cadastroCliente client[], ReservaA reserva[])
+{
+
     int opcao;
 
     printf("\n|================================\n");
@@ -1488,14 +1654,15 @@ int formaPagamento(){
     printf("Digite a forma de pagamento: ");
     scanf("%d", &opcao);
     //system("cls");
-    switch (opcao) {
+    switch (opcao)
+    {
     case 1:
         printf("\n________________________________________________________________________________________________________\n");
         printf("\t\t\t\t\tPagamento em Cartão.");
         printf("\n________________________________________________________________________________________________________\n");
         cartao();
         printf("\n________________________________________________________________________________________________________\n");
-        confirmarPagamento();
+
         break;
     case 2:
         printf("\n________________________________________________________________________________________________________\n");
@@ -1508,7 +1675,7 @@ int formaPagamento(){
         printf("\n________________________________________________________________________________________________________\n");
         printf("\t\t\t\t\tPagamento em Boleto.");
         printf("\n========================================================================================================\n");
-        boleto();//pagamento contabila automanticamente
+        boleto(nClientes, client, reserva);//pagamento contabila automanticamente
         break;
     case 4:
         printf("\n________________________________________________________________________________________________________\n");
@@ -1516,7 +1683,7 @@ int formaPagamento(){
         printf("\n________________________________________________________________________________________________________\n");
         printf("Chave pix: \n\t12 345 678 0001 00");
         printf("\n________________________________________________________________________________________________________\n");
-        confirmarPagamento();
+
         break;
     case 0:
         printf("Pagamento cancelado.\n");
@@ -1527,8 +1694,11 @@ int formaPagamento(){
     }
     return 0;
 }
+void cliente(nClientes, client);
+void valorReserva(nClientes,reservas);
+int boleto(int nClientes, cadastroCliente client[], ReservaA reserva[])
+{
 
-int boleto(){
     int numDoc;
     numDoc++;
     time_t agora = time(NULL);
@@ -1543,7 +1713,7 @@ int boleto(){
     printf("\n\tData: %s \t|", hoje);
     numeroDoc(numDoc);
     printf("\t|");
-    valorReserva();
+    valorReserva(nClientes,reserva);
     printf("\n________________________________|_______________________________|_______________________________________\n");
     cod();
     printf("--------------------------------------------------------------------------------------------------------\n");
@@ -1560,52 +1730,62 @@ int boleto(){
     enderecoMatriz();
     printf("\n________________________________________________________________________________________________________\n");
     printf("Pagador:\n");
-    cliente();
+    cliente(nClientes, client);
     printf("\n________________________________________________________________________________________________________\n\n");
     codBarra();
-
-    confirmarPagamento();
     return 0;
 }
 
-void numeroDoc(int *numDoc){
+void numeroDoc(int *numDoc)
+{
     printf("\t001230045600789.%d", numDoc);
     return;
 }
 
-void cod(){
+void cod()
+{
     int cont = 0;
     int numeros[48];
 
     printf("\n--------------------------------------------------------------------------------------------------------\n");
-    for (int i = 0; i < 47; i++){
+    for (int i = 0; i < 47; i++)
+    {
         numeros[i] = rand() % 10;
     }
     printf("\n\n");
-    for (int i = 0; i < 47; i++){
-        if (cont <= 0){
-             printf("\t\t\t\t\t| 123-4 | ");
+    for (int i = 0; i < 47; i++)
+    {
+        if (cont <= 0)
+        {
+            printf("\t\t\t\t\t| 123-4 | ");
         }
         printf("%d", numeros[i]);
-        if(cont == 5){
+        if(cont == 5)
+        {
             printf(".");
         }
-        if(cont == 10){
+        if(cont == 10)
+        {
             printf(" ");
         }
-        if(cont == 15){
+        if(cont == 15)
+        {
             printf(".");
         }
-        if(cont == 21){
+        if(cont == 21)
+        {
             printf(" ");
         }
-        if(cont == 26){
+        if(cont == 26)
+        {
             printf(".");
         }
-        if(cont == 32){
+        if(cont == 32)
+        {
             printf(" ");
         }
-        if(cont == 33){
+        if(cont == 33)
+        {
             printf(" ");
         }
         cont++;
@@ -1615,17 +1795,22 @@ void cod(){
     return;
 }
 
-void codBarra(){
+void codBarra()
+{
     int cont = 0;
-    for (int j = 0; j < 2; j++){
-        if(cont <= 0){
+    for (int j = 0; j < 2; j++)
+    {
+        if(cont <= 0)
+        {
             printf("\t\t\t\t\t\t|");
         }
-        if(cont == 1){
+        if(cont == 1)
+        {
             printf("\t\t\t\t\t\t|");
         }
         cont++;
-        for (int i = 0; i < 8; i++){
+        for (int i = 0; i < 8; i++)
+        {
             printf("|||||| ");
         }
         printf("\n");
@@ -1633,25 +1818,30 @@ void codBarra(){
     printf("\n--------------------------------------------------------------------------------------------------------\n");
 }
 
-void valorReserva(){
-    int valor = 1500;
+void valorReserva(int nclientes, ReservaA reserva[])
+{
 
-    printf("\tR$ %d,00", valor);
+    printf("\tR$ %.2f", reserva[nclientes - 1].precoreserva);
 }
 
-void enderecoMatriz(){
+void enderecoMatriz()
+{
     printf("\tSuites Algaritmos:\n");
     printf("\tEndereco: Araraquara-SP");
     return;
 }
 
-void cliente(){
-    printf("\tDorcas Chagas Pereira\n");
+void cliente(int nClientes, cadastroCliente client[])
+{
+
+    printf("\t%s\n", client[nClientes - 1].nome);
+    int opcao;
     printf("\t\t\t\t\tCodigo de Barra");
     return;
 }
 
-void cartao(){
+void cartao()
+{
     int opcao, dia, mes, ano;
     printf("Dorcas Chagas\n");
     printf("CPF: 123456789-10\n");
@@ -1659,23 +1849,42 @@ void cartao(){
     char numero_cartao[50] = "1234-5678-9012-3456";
     int codigo_seguranca;
 
-    printf("\n\nNº cartao: %s\n", numero_cartao);
+    printf("\n\nNº cartao: 0000-0000-0000-0000\n");
+    scanf("d%d%d%d-d%d%d%d-d%d%d%d-d%d%d%d-",&numero_cartao);
 
-    printf("Data de validade:");
+    printf("Data de validade: dd/mm/yyyy");
     scanf("%d/%d/%d/",&dia, &mes, &ano);
     fflush(stdin);
 
-    printf("\nCód de segurança");
+    printf("\nCód de segurança: 000");
     scanf("%d",&codigo_seguranca);
     return;
 }
 
-void confirmarPagamento(){
-    int opcao;
-    do{
+
+void confirmarPagamento(ReservaA reserva[], int *nReservas)
+{
+    int opcao,codigorese,reservaachada;
+    printf("\nDigite o codigo de rserva:\n");
+    scanf("%d", &codigorese);
+    if(*nReservas>0)
+    {
+
+        for(i=0; i<*nReservas; i++)
+        {
+            if(codigorese==reserva[i].CodRes)
+                reservaachada=i;
+        }
+
+    }
+    if(*nReservas==0)
+        printf("\nNão há reservas!");
+    do
+    {
         printf("\n\nConfirmar pagamento [1][sim]  [2][cancelar]\n");
         scanf("%d", &opcao);
-        switch (opcao) {
+        switch (opcao)
+        {
         case 1:
             printf("Pagamento confirmado!\n");
             break;
@@ -1686,7 +1895,16 @@ void confirmarPagamento(){
             printf("Opção inválida!\n");
             break;
         }
-    }while(opcao < 0 || opcao > 2);
+    }
+    while(opcao < 0 || opcao > 2);
+
+
+
+    if(opcao == 1)
+    {
+        reserva[reservaachada].pg = 1;
+    }
+    printf("\n%d", reserva[reservaachada].pg);
     system("pause");
     return;
 }
